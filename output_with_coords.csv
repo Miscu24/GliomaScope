@@ -1,0 +1,7 @@
+Sample_ID,grade,idh,age,country,Latitude,Longitude
+S1,Grade 2,Mutant,45,UK,54.7023545,-3.2765753
+S2,Grade 2,Mutant,50,France,46.603354,1.8883335
+S3,Grade 2,Mutant,43,Germany,51.1638175,10.4478313
+S4,Grade 3,Wildtype,55,UK,54.7023545,-3.2765753
+S5,Grade 3,Wildtype,60,France,46.603354,1.8883335
+S6,Grade 3,Wildtype,58,Germany,51.1638175,10.4478313

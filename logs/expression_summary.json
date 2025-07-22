@@ -1,0 +1,17 @@
+{
+    "name": "Expression",
+    "shape": {
+        "rows": 6,
+        "columns": 6
+    },
+    "data_type": "Metadata",
+    "missing_values": 0,
+    "duplicated_rows": 0,
+    "numeric_columns": [
+        "TP53",
+        "EGFR",
+        "IDH1",
+        "PTEN",
+        "MYC"
+    ]
+}

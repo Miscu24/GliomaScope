@@ -1,0 +1,11 @@
+Sample_ID,grade,idh,age,Country
+Sample_1,2,mutant,45,United Kingdom
+Sample_2,3,wildtype,52,Germany
+Sample_3,2,mutant,34,United Kingdom
+Sample_4,3,wildtype,61,Germany
+Sample_5,2,mutant,39,France
+Sample_6,3,wildtype,47,France
+Sample_7,2,mutant,55,Spain
+Sample_8,3,wildtype,42,Spain
+Sample_9,2,mutant,49,Italy
+Sample_10,3,wildtype,60,Italy
