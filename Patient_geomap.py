@@ -8,10 +8,10 @@ import os
 import ssl
 import certifi
 
-# ✅ Explicitly create SSL context using certifi bundle
+# Explicitly create SSL context using certifi bundle
 ctx = ssl.create_default_context(cafile=certifi.where())
 
-# ✅ Pass SSL context to geolocator
+# Pass SSL context to geolocator
 geolocator = Nominatim(user_agent="GliomaScope_mapper", ssl_context=ctx)
 geo_cache = {}
 
@@ -31,7 +31,7 @@ def geocode_country(country):
         print(f"Failed to geocode {country}: {e}")
     return (None, None)
 
-def plot_patient_geomap(metadata_df, filter_applied=None, color_by='country'):
+def plot_patient_geomap(metadata_df, filter_applied=None, color_by='country', zoom_to_region=False):
     df = metadata_df.copy()
 
     filter_summary = ""
@@ -89,6 +89,8 @@ def plot_patient_geomap(metadata_df, filter_applied=None, color_by='country'):
         projection='natural earth',
         title='Glioma Patient Map'
     )
+    if zoom_to_region:
+        fig.update_geos(fitbounds="locations", visible=True)
         # Add bottom subtitle annotation
     fig.add_annotation(
         text=subtitle_text,
@@ -106,3 +108,67 @@ def plot_patient_geomap(metadata_df, filter_applied=None, color_by='country'):
     # Try to open map in browser
     map_path = os.path.abspath("geomap_test.html")
     os.system(f"open '{map_path}'")  # Mac-specific fallback
+
+def plot_study_summary(metadata_df, group_by='country'):
+    if group_by not in metadata_df.columns:
+        print(f"Column '{group_by}' not found in metadata.")
+        return
+    
+    if 'Latitude' not in metadata_df.columns or 'Longitude' not in metadata_df.columns:
+        print("Geocoding countries for study-level summary...")
+        metadata_df[['Latitude', 'Longitude']] = metadata_df['country'].apply(lambda x: pd.Series(geocode_country(x)))
+
+    df_grouped = metadata_df.groupby(group_by).agg({
+        'Latitude': 'first',
+        'Longitude': 'first',
+        'Sample_ID': 'count',
+        'age': 'mean' if 'age' in metadata_df.columns else 'first',
+    }).reset_index()
+
+    df_grouped.rename(columns={
+        'Sample_ID': 'Sample_Count',
+        'age': 'Mean_Age'
+    }, inplace=True)
+
+    def summarize_column(col_data):
+        return ', '.join([f"{k}: {v}" for k, v in col_data.value_counts().to_dict().items()])
+    
+    sex_summary = metadata_df.groupby(group_by)['sex'].apply(lambda x: summarize_column(x) if x.notna().any() else 'N/A')
+    idh_summary = metadata_df.groupby(group_by)['idh'].apply(lambda x: summarize_column(x) if x.notna().any() else 'N/A')
+
+    df_grouped['Sex_Summary'] = df_grouped[group_by].map(sex_summary)
+    df_grouped['IDH_Summary'] = df_grouped[group_by].map(idh_summary)
+
+    hover_data = {
+        'Sample_Count': True,
+        'Mean_Age': ':.1f',
+        'Sex_Summary': True,
+        'IDH_Summary': True
+    }
+
+    fig = px.scatter_geo(
+        df_grouped,
+        lat='Latitude',
+        lon='Longitude',
+        size='Sample_Count',
+        color='Sample_Count',
+        text=group_by,
+        hover_data=hover_data,
+        projection='natural earth',
+        title=f"Study-Level Summary Map by {group_by.capitalize()}"
+    )
+    fig.update_geos(fitbounds="locations", visible=True)
+
+    fig.update_traces(
+        marker=dict(
+            sizemode='area',
+            sizeref=2.* max(df_grouped['Sample_Count']) / (100.**2),
+            sizemin=4
+        )
+    )
+    html_file = f"study_summary_{group_by}.html"
+    fig.write_html(html_file)
+    print(f"Study summary map saved to '{html_file}'.")
+    
+    map_path = os.path.abspath(html_file)
+    os.system(f"open '{map_path}'")

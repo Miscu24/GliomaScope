@@ -2,6 +2,7 @@
 
 import pandas as pd
 import plotly.express as px
+import webbrowser 
 
 
 def explore_gene_expression(expression_df, metadata_df, gene_name, group_col = 'grade'):
@@ -36,6 +37,22 @@ def map_gene_to_chromosome(gene_name, gene_location_file="gene_location.csv"):
             chromosome = gene_info.iloc[0]['Chromosome']
             print(f"Gene '{gene_name}' is located on chromosome {chromosome}.")
 
+            #Ensemble & NCBI links
+            ensembl_link = f"https://www.ensembl.org/Multi/Search/Results?q={gene_name}&site=ensembl"
+            ncbi_link = f"https://www.ncbi.nlm.nih.gov/gene/?term={gene_name}"
+            print(f" Ensembl: {ensembl_link}")
+            print(f"NCBI: {ncbi_link}")
+
+            #Open ensembl link in browser 
+            open_browser = input("Open Ensembl link in browser? (y/n): ").strip().lower()
+            if open_browser == 'y':
+                webbrowser.open(ensembl_link)
+            
+            #Open NCBI link in browser
+            open_browser = input("Open NCBI link in browser? (y/n): ").strip().lower()
+            if open_browser == 'y':
+                webbrowser.open(ncbi_link)
+
             fig = px.bar(
                 x=gene_info['Chromosome'],
                 y=[1],
@@ -54,8 +71,8 @@ def map_gene_to_chromosome(gene_name, gene_location_file="gene_location.csv"):
  
 
 #for debugging: list the available genes
-def list_available_genes(expression_df):
-    genes =[col for col in expression_df.columns if col.lower() != 'sample_id']
-    print(f"Available genes: {', '.join(genes)}")
-
+def list_available_genes(expression_df, limit=10):
+    genes = [col for col in expression_df.columns if col.lower() != 'sample_id']
+    preview = ', '.join(genes[:limit])
+    print(f"{preview}{'...' if len(genes) > limit else ''}")
 

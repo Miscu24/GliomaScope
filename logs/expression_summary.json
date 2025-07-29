@@ -1,17 +1,22 @@
 {
     "name": "Expression",
     "shape": {
-        "rows": 6,
-        "columns": 6
+        "rows": 20,
+        "columns": 11
     },
-    "data_type": "Metadata",
+    "data_type": "Unknown",
     "missing_values": 0,
     "duplicated_rows": 0,
     "numeric_columns": [
-        "TP53",
-        "EGFR",
-        "IDH1",
-        "PTEN",
-        "MYC"
+        "GeneA",
+        "GeneB",
+        "GeneC",
+        "GeneD",
+        "GeneE",
+        "GeneF",
+        "GeneG",
+        "GeneH",
+        "GeneI",
+        "GeneJ"
     ]
 }

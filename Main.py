@@ -4,11 +4,12 @@ from Explore_data import preview_dataframe, display_summary, warn_if_missing_col
 from Visuals import plot_pca
 from Patient_geomap import plot_patient_geomap
 from Patient_metadata import display_patient_summary
-from Dimensionality_Reduction import plot_pca as plot_pca
-from Differential_exppression import perform_differential_expression
+from Dimensionality_Reduction import plot_pca as plot_dimred_pca
+from Differential_expression import perform_differential_expression
 from Utils import list_available_genes
 from Utils import filter_metadata
 from Gene_explorer import explore_gene_expression, map_gene_to_chromosome
+
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -33,10 +34,12 @@ def main_menu():
         print("10. Filter + export patient metadata")
         print("11. Visualise PCA")
         print("12. Visualise UMAP")
-        print("13. Differential expression viewer")
-        print("14. Run differential expression analysis")
+        print("13. Differential expression viewer (Grade 2 vs 3)")
+        print("14. Explore individual gene expression")
         print("15. Chromosomal gene mapping")
-        print("16. Exit")
+        print("16. Custom differential expression analysis")
+        print("17. Heatmap visualisation for gene sets")
+        print("18. Exit")
 
         choice = input("Enter your choice from the options provided: ").strip()
 
@@ -115,12 +118,28 @@ def main_menu():
         
         elif choice == '8':
             if data_manager.metadata is not None:
+                print("\n--- Geomap Options ---")
+                print("1. Visualise individual patient location")
+                print("2. Visualise study-level summary on a map")
+                sub_choice = input("Enter your choice: 1 or 2: ").strip()
+
                 try:
-                    plot_patient_geomap(data_manager.metadata)
+                    from Patient_geomap import plot_patient_geomap, plot_study_summary
+
+                    if sub_choice == '1':
+                        zoom_choice = input("Enable zoom to region? (y/n): ").strip().lower()
+                        zoom_enabled = zoom_choice == 'y'
+                        plot_patient_geomap(data_manager.metadata, zoom_to_region=zoom_enabled)
+
+                    elif sub_choice == '2':
+                        plot_study_summary(data_manager.metadata)
+                        
+                    else:
+                        print("Invalid option. Please choose 1 or 2.")
                 except Exception as e:
                     print(f"Error occurred while plotting patient geo map: {e}")
             else:
-                print("No metadata loaded. Please upload metadata first.  ")
+                print("No metadata loaded. Please upload metadata first.")
 
         
         elif choice == '9':
@@ -169,11 +188,11 @@ def main_menu():
             else:
                 from Dimensionality_Reduction import plot_umap
                 
-                visible_columns = [col for col in data_manager.expression.columns if col.lower()!= "sample_id"]
-                print("Available columns for PCA plot:", ", ".join(visible_columns))
+                visible_columns = [col for col in data_manager.metadata.columns if col.lower() != "sample_id"]
+                print("Available columns for UMAP plot:", ", ".join(visible_columns))
 
-                colour_by = input("Colour PCA plot by metadata column (e.g. grade, idh)? Leave blank for none: ").strip()
-                matched_col = next((col for col in data_manager.expression.columns if col.lower() == colour_by.lower()), None) if colour_by and data_manager.metadata is not None else None
+                colour_by = input("Colour UMAP plot by metadata column (e.g. grade, idh)? Leave blank for none: ").strip()
+                matched_col = next((col for col in data_manager.metadata.columns if col.lower() == colour_by.lower()), None) if colour_by and data_manager.metadata is not None else None
 
                 try:
                     plot_umap(
@@ -232,16 +251,80 @@ def main_menu():
                     print(f"Error occurred while exploring gene expression: {e}")
 
         elif choice == '15':
-            gene_name = input("Enter the gene name to explore: ").strip()
+            if data_manager.expression_df is not None and data_manager.metadata is not None:
+                from Gene_explorer import explore_gene_expression, map_gene_to_chromosome, list_available_genes
 
-            try:
-                from Gene_explorer import explore_gene_expression, map_gene_to_chromosome
-                explore_gene_expression(data_manager.expression, data_manager.metadata, gene_name)
-                map_gene_to_chromosome(gene_name)
-            except Exception as e:
-                print(f"Error occurred while exploring gene expression or mapping gene to chromosome: {e}")
+                # Suggest a few available genes
+                print("\nHere are some available genes you can explore:")
+                list_available_genes(data_manager.expression_df)
+
+                gene_name = input("Enter the gene name to explore: ").strip()
+
+                try:
+                    explore_gene_expression(data_manager.expression_df, data_manager.metadata, gene_name)
+                    map_gene_to_chromosome(gene_name)
+                except Exception as e:
+                    print(f"Error occurred while exploring gene expression or mapping gene to chromosome: {e}")
+            else:
+                print("Expression or metadata file not loaded. Please upload both before using this option.")
 
         elif choice == '16':
+            if data_manager.expression_df is not None and data_manager.metadata is not None:
+                from Differential_expression import perform_differential_expression
+
+                print("\n--- Differential Expression ---")
+                group_col = input("Enter metadata column to compare (e.g. grade): ").strip()
+                group_1 = input("Enter first group label (e.g. 2): ").strip()
+                group_2 = input("Enter second group label (e.g. 3): ").strip()
+
+                try:
+                    results = perform_differential_expression(
+                        data_manager.expression_df,
+                        data_manager.metadata,
+                        group_col=group_col,
+                        group_1=group_1,
+                        group_2=group_2
+                    )
+                    # Filter for significant results (adjusted p < 0.05)
+                    significant_results = results[results['adj_p_value'] < 0.05]
+
+                    if not significant_results.empty:
+                        print("\nTop 10 significant results by adjusted p-value (FDR < 0.05):")
+                        print(significant_results.head(10).to_string(index=False))
+                    else:
+                        print("\nNo significant genes found (FDR < 0.05).")
+                        
+                except Exception as e:
+                    print(f"Error during differential expression analysis: {e}")
+            else:
+                print("Expression or metadata file not loaded. Please upload both before using this option.")
+
+        elif choice == '17':
+            if data_manager.expression_df is not None and data_manager.metadata is not None:
+                from Heatmap_visualisation import plot_expression_heatmap
+                from Utils import list_available_genes
+
+                all_genes = list_available_genes(data_manager.expression_df)
+                print("Available genes (showing top 20):", ', '.join(all_genes[:20]))
+
+                gene_input = input("Enter genes to visualise (comma-separated): ").strip()
+                gene_list = [g.strip() for g in gene_input.split(',')]
+
+                group_col = input("Optional: Enter metadata column to group by (e.g. grade): ").strip()
+
+                try:
+                    plot_expression_heatmap(
+                        data_manager.expression_df,
+                        data_manager.metadata,
+                        genes=gene_list,
+                        group_col=group_col if group_col else None
+                    )
+                except Exception as e:
+                    print(f"Error generating heatmap: {e}")
+            else:
+                print("Please upload both expression and metadata files first.")
+
+        elif choice == '18':
             print("Thank you for using our tool. Goodbye!")
             sys.exit()
         else:

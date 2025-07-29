@@ -209,4 +209,6 @@ def smart_load_metadata(file_path, data_manager, missing_method='fill_zero', sav
     idh = input("Enter IDH subtype (optional): ").strip().upper()
 
 def list_available_genes(expression_df):
-    return [col for col in expression_df.columns if col.lower()!= "sample_id"]
+    genes = [col for col in expression_df.columns if col.lower() != 'sample_id']
+    print(f"Available genes: {', '.join(genes)}")
+    return genes

@@ -53,6 +53,11 @@ def plot_umap(expression_df, metadata_df=None, colour_by=None):
     #Drop non-numeric columns
     numeric_data = expression_df.select_dtypes(include='number')
 
+    #  Check if 'Sample_ID' is present
+    if 'Sample_ID' not in expression_df.columns:
+        print("Error: 'Sample_ID' column not found in expression_df.")
+        return
+
     #run umap
     reducer = umap.UMAP(n_components=2, random_state=42)
     umap_result = reducer.fit_transform(numeric_data)
@@ -79,8 +84,7 @@ def plot_umap(expression_df, metadata_df=None, colour_by=None):
         hover_name='Sample_ID',
         hover_data=hover_data,
         text='Sample_ID', 
-        title=f"UMAP Coloured by {colour_by}" if colour_by else "UMAP of Expression Data"
-    )
+        title=f"UMAP Coloured by {colour_by.title()}" if colour_by else "UMAP of Expression Data"    )
 
     fig.update_traces(marker=dict(size=8, opacity=0.8), textposition='top center')
     fig.show(renderer="browser")

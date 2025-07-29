@@ -1,8 +1,21 @@
-Sample_ID,grade,idh,age,country
-S1,Grade 2,Mutant,45,UK
-S2,Grade 2,Mutant,50,France
-S3,Grade 2,Mutant,43,Germany
-S4,Grade 3,Wildtype,55,UK
-S5,Grade 3,Wildtype,60,France
-S6,Grade 3,Wildtype,58,Germany
-
+Sample_ID,age,sex,grade,idh,country
+Sample_01,45,F,2,Mutated,USA
+Sample_02,50,M,2,Mutated,USA
+Sample_03,47,F,2,Mutated,Canada
+Sample_04,53,M,3,Wildtype,Canada
+Sample_05,49,F,3,Wildtype,UK
+Sample_06,52,M,2,Mutated,Germany
+Sample_07,48,F,3,Wildtype,Germany
+Sample_08,55,M,2,Mutated,France
+Sample_09,46,F,3,Wildtype,France
+Sample_10,54,M,3,Wildtype,Spain
+Sample_11,51,F,2,Mutated,Spain
+Sample_12,47,M,3,Wildtype,Italy
+Sample_13,50,F,2,Mutated,Italy
+Sample_14,53,M,3,Wildtype,USA
+Sample_15,45,F,2,Mutated,UK
+Sample_16,56,M,3,Wildtype,Canada
+Sample_17,48,F,2,Mutated,Germany
+Sample_18,52,M,3,Wildtype,France
+Sample_19,49,F,2,Mutated,Italy
+Sample_20,55,M,3,Wildtype,USA
