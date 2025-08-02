@@ -18,6 +18,31 @@ import time
 data_manager = DataManager()
 
 def main_menu():
+    os.system('clear')
+
+    print(r"""
+O       o O       o O       o O       o O       o         O
+| O   o | | O   o | | O   o | | O   o | | O   o | | O   o |
+| | O | | | | O | | | | O | | | | O | | | | O | | | | O | |
+| o   O | | o   O | | o   O | | o   O | | o   O | | o   O |
+o       O o       O o       O o       O o       O o       O
+   ___ _ _                       __                      
+  / _ \ (_) ___  _ __ ___   __ _/ _\ ___ ___  _ __   ___ 
+ / /_\/ | |/ _ \| '_ ` _ \ / _` \ \ / __/ _ \| '_ \ / _ \
+/ /_\\| | | (_) | | | | | | (_| |\ \ (_| (_) | |_) |  __/
+\____/|_|_|\___/|_| |_| |_|\__,_\__/\___\___/| .__/ \___|
+                                             |_|         
+  
+          Designed for all. Built for insight. 
+        Dive deep into glioma transcriptomics.
+             Fast. Intuitive. Insightful.
+""")
+
+    print("Are you looking for deeper insights into gliomas?")
+    print("\nWell, here you can use your own metadata and gene expression data to explore the tumour landscape \nlike never before. \nGliomaScope lets you visualise PCA, UMAP, and gene expression patterns, perform differential analysis, \nmap genes to their chromosomal locations, and generate publication-ready insights. \nAll right from your terminal.\n")
+
+    input("   Press ENTER to dive in...")
+
     os.system('cls' if os.name == 'nt' else 'clear')
     time
     while True:
@@ -26,18 +51,18 @@ def main_menu():
         print("2. Upload expression file")
         print("3. Preview merged metadata + expression")
         print("4. Explore metadata summary")
-        print("5. Explore expression summary")
-        print("6. Filter metadata by grade/IDH/age")
-        print("7. Plot PCA from expression data")
-        print("8. Patient_Geomap from metadata")
-        print("9. View patient metadata summary")
-        print("10. Filter + export patient metadata")
-        print("11. Visualise PCA")
+        print("5. View patient metadata summary")
+        print("6. Filter + export patient metadata")
+        print("7. Filter metadata by grade/IDH/age")
+        print("8. Explore expression summary")
+        print("9. Patient_Geomap from metadata")
+        print("10. Visualise PCA")
+        print("11. Plot PCA from expression data")
         print("12. Visualise UMAP")
-        print("13. Differential expression viewer (Grade 2 vs 3)")
-        print("14. Explore individual gene expression")
+        print("13. Differential expression viewer (Grade 1 vs 2)")
+        print("14. Custom differential expression analysis")
         print("15. Chromosomal gene mapping")
-        print("16. Custom differential expression analysis")
+        print("16. Explore individual gene expression")
         print("17. Heatmap visualisation for gene sets")
         print("18. Exit")
 
@@ -66,13 +91,20 @@ def main_menu():
                 print("No metadata loaded.")
 
         elif choice == '5':
-            if data_manager.expression is not None:
-                preview_dataframe(data_manager.expression, name='Expression')
-                display_summary(data_manager.expression, name='Expression')
+            if data_manager.metadata is not None:
+                print(">>> Displaying patient summary...")
+                display_patient_summary(data_manager.metadata)
             else:
-                print("No expression loaded.")
+                print("No metadata loaded.")
 
         elif choice == '6':
+            if data_manager.expression is not None:
+                colour_by = input("Enter metadata column to color by (or press Enter to skip): ").strip()
+                plot_pca(data_manager.expression, data_manager.metadata, colour_by if colour_by else None)
+            else:
+                print("Please load expression data first.")
+
+        elif choice == '7':
             if data_manager.metadata is None:
                 print("No metadata loaded.")
                 continue
@@ -105,18 +137,14 @@ def main_menu():
                 print("Filtered metadata saved to 'cleaned_data/metadata_filtered.csv'.")
 
 
-        elif choice== '7':
-            if data_manager.expression is None:
-                print("Expression data is not loaded.")
-                continue
-
-            colour_by  = input("Colour PCA plot by metadata column (e.g. grade, idh) ? Leave blank for none:").strip()
-            if colour_by and data_manager is not None:
-                plot_pca(data_manager.expression, data_manager.metadata, colour_by=colour_by)
-            else:
-                plot_pca(data_manager.expression)
-        
         elif choice == '8':
+            if data_manager.expression is not None:
+                preview_dataframe(data_manager.expression, name='Expression')
+                display_summary(data_manager.expression, name='Expression')
+            else:
+                print("No expression loaded.")
+
+        elif choice == '9':
             if data_manager.metadata is not None:
                 print("\n--- Geomap Options ---")
                 print("1. Visualise individual patient location")
@@ -141,23 +169,7 @@ def main_menu():
             else:
                 print("No metadata loaded. Please upload metadata first.")
 
-        
-        elif choice == '9':
-            if data_manager.metadata is not None:
-                print(">>> Displaying patient summary...")
-                display_patient_summary(data_manager.metadata)
-            else:
-                print("No metadata loaded.")
-
         elif choice == '10':
-            if data_manager.expression is not None:
-                colour_by = input("Enter metadata column to color by (or press Enter to skip): ").strip()
-                plot_pca(data_manager.expression, data_manager.metadata, colour_by if colour_by else None)
-            else:
-                print("Please load expression data first.")
-
-            
-        elif choice == '11':
             if data_manager.expression is None:
                 print("Expression data not loaded. Please upload expression data first (Option 2).")
             elif data_manager.metadata is None:
@@ -179,6 +191,18 @@ def main_menu():
                             plot_pca(data_manager.expression)
                     except Exception as e:
                         print(f"Error occurred while plotting PCA: {e}")
+
+        elif choice== '11':
+            if data_manager.expression is None:
+                print("Expression data is not loaded.")
+                continue
+
+            colour_by  = input("Colour PCA plot by metadata column (e.g. grade, idh) ? Leave blank for none:").strip()
+            if colour_by and data_manager is not None:
+                plot_pca(data_manager.expression, data_manager.metadata, colour_by=colour_by)
+            else:
+                plot_pca(data_manager.expression)
+        
 
         elif choice == '12':
             if data_manager.expression is None:
@@ -223,53 +247,7 @@ def main_menu():
                     print(f"Error occurred while performing differential expression: {e}")
 
         elif choice == '14':
-            if data_manager.expression is None:
-                print("Expression data not loaded. Please upload expression data first (Option 2).")
-            elif data_manager.metadata is None:
-                print("Metadata is not loaded. Please upload metadata first (Option 1).")
-            else:
-                genes = list_available_genes(data_manager.expression)
-                print(f"Available Genes: {', '.join(genes[:10])}...") #showing top 10 genes
-                gene_name = input("Enter a gene name to explore expression: ").strip()
-
-                if gene_name not in genes:
-                    print(f"Gene '{gene_name}' not found in expression data.")
-                    continue 
-
-                #show columns to group by 
-                groupable_cols = [col for col in data_manager.metadata.columns if col.lower()!= "sample_id"]
-                print(f"Available columns to group by: {', '.join(groupable_cols)}...")
-                group_col = input("Enter metadata column to group by (or press Enter to skip): ").strip()
-
-                if group_col not in groupable_cols:
-                    print(f"Column '{group_col}' not found in metadata. Skipping grouping by column.")
-                    continue
-
-                try:
-                    explore_gene_expression(data_manager.expression, data_manager.metadata, gene_name, group_col)
-                except Exception as e:
-                    print(f"Error occurred while exploring gene expression: {e}")
-
-        elif choice == '15':
-            if data_manager.expression_df is not None and data_manager.metadata is not None:
-                from Gene_explorer import explore_gene_expression, map_gene_to_chromosome, list_available_genes
-
-                # Suggest a few available genes
-                print("\nHere are some available genes you can explore:")
-                list_available_genes(data_manager.expression_df)
-
-                gene_name = input("Enter the gene name to explore: ").strip()
-
-                try:
-                    explore_gene_expression(data_manager.expression_df, data_manager.metadata, gene_name)
-                    map_gene_to_chromosome(gene_name)
-                except Exception as e:
-                    print(f"Error occurred while exploring gene expression or mapping gene to chromosome: {e}")
-            else:
-                print("Expression or metadata file not loaded. Please upload both before using this option.")
-
-        elif choice == '16':
-            if data_manager.expression_df is not None and data_manager.metadata is not None:
+            if data_manager.expression is not None and data_manager.metadata is not None:
                 from Differential_expression import perform_differential_expression
 
                 print("\n--- Differential Expression ---")
@@ -279,7 +257,7 @@ def main_menu():
 
                 try:
                     results = perform_differential_expression(
-                        data_manager.expression_df,
+                        data_manager.expression,
                         data_manager.metadata,
                         group_col=group_col,
                         group_1=group_1,
@@ -299,12 +277,60 @@ def main_menu():
             else:
                 print("Expression or metadata file not loaded. Please upload both before using this option.")
 
+        elif choice == '15':
+            if data_manager.expression is not None and data_manager.metadata is not None:
+                from Gene_explorer import explore_gene_expression, map_gene_to_chromosome, list_available_genes
+
+                # Suggest a few available genes
+                print("\nHere are some available genes you can explore:")
+                list_available_genes(data_manager.expression)
+
+                gene_name = input("Enter the gene name to explore: ").strip()
+
+                try:
+                    explore_gene_expression(data_manager.expression, data_manager.metadata, gene_name)
+                    map_gene_to_chromosome(gene_name)
+                except Exception as e:
+                    print(f"Error occurred while exploring gene expression or mapping gene to chromosome: {e}")
+            else:
+                print("Expression or metadata file not loaded. Please upload both before using this option.")
+
+        elif choice == '16':
+            if data_manager.expression is None:
+                print("Expression data not loaded. Please upload expression data first (Option 2).")
+            elif data_manager.metadata is None:
+                print("Metadata is not loaded. Please upload metadata first (Option 1).")
+            else:
+                genes = list_available_genes(data_manager.expression)
+                if genes:
+                    print(f"Available Genes: {', '.join(genes[:10])}...") #showing top 10 genes
+                gene_name = input("Enter a gene name to explore expression: ").strip()
+
+                if genes and gene_name not in genes:
+                    print(f"Gene '{gene_name}' not found in expression data.")
+                    continue 
+
+                #show columns to group by 
+                groupable_cols = [col for col in data_manager.metadata.columns if col.lower()!= "sample_id"]
+                print(f"Available columns to group by: {', '.join(groupable_cols)}...")
+                group_col = input("Enter metadata column to group by (or press Enter to skip): ").strip()
+
+                if group_col not in groupable_cols:
+                    print(f"Column '{group_col}' not found in metadata. Skipping grouping by column.")
+                    continue
+
+                try:
+                    explore_gene_expression(data_manager.expression, data_manager.metadata, gene_name, group_col)
+                except Exception as e:
+                    print(f"Error occurred while exploring gene expression: {e}")
+
+
         elif choice == '17':
-            if data_manager.expression_df is not None and data_manager.metadata is not None:
+            if data_manager.expression is not None and data_manager.metadata is not None:
                 from Heatmap_visualisation import plot_expression_heatmap
                 from Utils import list_available_genes
 
-                all_genes = list_available_genes(data_manager.expression_df)
+                all_genes = list_available_genes(data_manager.expression)
                 print("Available genes (showing top 20):", ', '.join(all_genes[:20]))
 
                 gene_input = input("Enter genes to visualise (comma-separated): ").strip()
@@ -314,7 +340,7 @@ def main_menu():
 
                 try:
                     plot_expression_heatmap(
-                        data_manager.expression_df,
+                        data_manager.expression,
                         data_manager.metadata,
                         genes=gene_list,
                         group_col=group_col if group_col else None
@@ -331,5 +357,10 @@ def main_menu():
             print("Invalid choice. Please choose from 1-10. Try again.")
             time.sleep(1)
 
+
 if __name__ == "__main__":
-    main_menu()
+    try:
+        main_menu()
+    except KeyboardInterrupt:
+        print("\n\n[!] KeyboardInterrupt received. Exiting GliomaScope CLI gracefully.")
+        sys.exit(0)
