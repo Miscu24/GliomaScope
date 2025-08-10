@@ -30,6 +30,38 @@ A modern, interactive web application for advanced glioma transcriptomics analys
 - **Export Functionality**: Download filtered and processed data
 - **Results Download**: Export analysis results as CSV files
 
+## Project Structure
+
+```
+GliomaScope/
+├── src/                          # Source code
+│   ├── analysis/                 # Analysis modules
+│   │   ├── Differential_expression.py
+│   │   └── Gene_explorer.py
+│   ├── visualization/            # Visualization modules
+│   │   ├── Dimensionality_Reduction.py
+│   │   ├── Heatmap_visualisation.py
+│   │   ├── Patient_geomap.py
+│   │   └── Visuals.py
+│   ├── data_handling/           # Data processing modules
+│   │   ├── Data_loader.py
+│   │   ├── Explore_data.py
+│   │   ├── FileUploadHandler.py
+│   │   ├── Format_data.py
+│   │   └── Patient_metadata.py
+│   └── utils/                   # Utility modules
+│       └── Utils.py
+├── static/                      # Web assets
+│   ├── css/                     # Stylesheets
+│   ├── js/                      # JavaScript files
+│   └── images/                  # Images
+├── templates/                   # HTML templates
+├── app.py                      # Main Flask application
+├── Main.py                     # Terminal interface
+├── requirements.txt            # Python dependencies
+└── README.md                   # This file
+```
+
 ## Installation
 
 ### Prerequisites
@@ -60,13 +92,18 @@ A modern, interactive web application for advanced glioma transcriptomics analys
    pip install -r requirements.txt
    ```
 
-4. **Run the application**
+4. **Run the web application**
    ```bash
    python app.py
    ```
+   
+   **Or run the terminal interface**
+   ```bash
+   python Main.py
+   ```
 
 5. **Access the web application**
-   Open your browser and navigate to: `http://localhost:5000`
+   Open your browser and navigate to: `http://localhost:5002`
 
 ## Usage Guide
 

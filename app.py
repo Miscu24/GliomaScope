@@ -13,16 +13,16 @@ from functools import lru_cache
 import time
 
 # Import all the existing modules
-from Data_loader import DataManager
-from Utils import process_upload, list_available_genes, filter_metadata
-from Explore_data import preview_dataframe, display_summary, warn_if_missing_columns
-from Dimensionality_Reduction import plot_pca
-from Patient_geomap import plot_patient_geomap, plot_study_summary
-from Patient_metadata import display_patient_summary
-from Dimensionality_Reduction import plot_umap
-from Differential_expression import perform_differential_expression
-from Gene_explorer import explore_gene_expression, map_gene_to_chromosome
-from Heatmap_visualisation import plot_expression_heatmap
+from src.data_handling.Data_loader import DataManager
+from src.utils.Utils import process_upload, list_available_genes, filter_metadata
+from src.data_handling.Explore_data import preview_dataframe, display_summary, warn_if_missing_columns
+from src.visualization.Dimensionality_Reduction import plot_pca
+from src.visualization.Patient_geomap import plot_patient_geomap, plot_study_summary
+from src.data_handling.Patient_metadata import display_patient_summary
+from src.visualization.Dimensionality_Reduction import plot_umap
+from src.analysis.Differential_expression import perform_differential_expression
+from src.analysis.Gene_explorer import explore_gene_expression, map_gene_to_chromosome
+from src.visualization.Heatmap_visualisation import plot_expression_heatmap
 
 app = Flask(__name__)
 app.secret_key = 'glioma_scope_secret_key_2024'
@@ -959,8 +959,8 @@ def gene_expression_route():
     group_col = data.get('group_col', 'grade')
     
     try:
-        html_content, _ = create_plot_html(
-            explore_gene_expression,
+        # Call the explore_gene_expression function which now saves to file and opens in browser
+        explore_gene_expression(
             data_manager.expression,
             data_manager.metadata,
             gene_name,
@@ -969,7 +969,7 @@ def gene_expression_route():
         
         return jsonify({
             'success': True,
-            'plot_html': html_content
+            'message': f'Gene expression plot for {gene_name} generated successfully'
         })
         
     except Exception as e:
@@ -984,9 +984,14 @@ def heatmap_route():
     genes = data.get('genes', [])
     group_col = data.get('group_col')
     
+    if not genes:
+        return jsonify({'error': 'No genes provided'}), 400
+    
     try:
-        html_content, _ = create_plot_html(
-            plot_expression_heatmap,
+        from src.visualization.Heatmap_visualisation import plot_expression_heatmap
+        
+        # Call the plot_expression_heatmap function which saves to file and opens in browser
+        plot_expression_heatmap(
             data_manager.expression,
             data_manager.metadata if data_manager.metadata is not None else None,
             genes=genes,
@@ -995,7 +1000,7 @@ def heatmap_route():
         
         return jsonify({
             'success': True,
-            'plot_html': html_content
+            'message': f'Heatmap for {len(genes)} genes generated successfully'
         })
         
     except Exception as e:
@@ -1020,7 +1025,7 @@ def patient_geomap_route():
         zoom_to_region = data.get('zoom_to_region', False)
         
         # Use the plot_patient_geomap function which saves to file and opens in browser
-        from Patient_geomap import plot_patient_geomap
+        from src.visualization.Patient_geomap import plot_patient_geomap
         
         plot_patient_geomap(
             data_manager.metadata, 
@@ -1102,7 +1107,7 @@ def geo_download():
         return jsonify({'error': 'GEO ID is required'}), 400
     
     try:
-        from Utils import fetch_and_format_geo
+        from src.utils.Utils import fetch_and_format_geo
         
         print(f"Downloading GEO dataset {geo_id}...")
         meta_df, expr_df = fetch_and_format_geo(geo_id)
@@ -1170,7 +1175,7 @@ def format_dataset():
         metadata_file.save(meta_path)
         
         # Format the dataset
-        from Format_data import format_for_gliomascope
+        from src.data_handling.Format_data import format_for_gliomascope
         format_for_gliomascope(expr_path, meta_path, expr_sample_col, meta_sample_col)
         
         # Load formatted data
@@ -1228,30 +1233,20 @@ def chromosome_mapping():
         return jsonify({'error': 'No expression data loaded'}), 400
     
     data = request.get_json()
-    genes = data.get('genes', [])
-    chromosome_filter = data.get('chromosome_filter')
+    gene_name = data.get('gene_name')
     
-    if not genes:
-        return jsonify({'error': 'No genes provided'}), 400
+    if not gene_name:
+        return jsonify({'error': 'No gene provided'}), 400
     
     try:
-        from Gene_explorer import map_gene_to_chromosome
+        from src.analysis.Gene_explorer import map_gene_to_chromosome
         
-        # For now, return a placeholder result
-        # In a full implementation, you would call the actual chromosome mapping function
-        html_content = f"""
-        <div class="alert alert-info">
-            <h6>Chromosome Mapping Results</h6>
-            <p>Genes mapped: {', '.join(genes)}</p>
-            <p>Chromosome filter: {chromosome_filter or 'All chromosomes'}</p>
-            <p>The chromosome mapping visualization would appear here.</p>
-            <p><em>Note: Full chromosome mapping implementation requires additional gene annotation data.</em></p>
-        </div>
-        """
+        # Call the map_gene_to_chromosome function which saves to file and opens in browser
+        map_gene_to_chromosome(gene_name)
         
         return jsonify({
             'success': True,
-            'plot_html': html_content
+            'message': f'Chromosome mapping for {gene_name} generated successfully'
         })
         
     except Exception as e:
@@ -1259,18 +1254,46 @@ def chromosome_mapping():
 
 @app.route('/available_genes')
 def available_genes():
+    """Get available genes with their actual gene names (not probe IDs)"""
     if data_manager.expression is None:
         return jsonify({'error': 'No expression data loaded'}), 400
     
     try:
-        genes = [col for col in data_manager.expression.columns if col.lower() != 'sample']
+        from src.utils.Utils import get_all_available_genes, load_gene_annotations
+        
+        # Get gene annotations
+        annotations = load_gene_annotations()
+        
+        # Get all available genes with mappings
+        gene_mapping = get_all_available_genes(data_manager.expression, annotations)
+        
+        # Create a list of gene names with their probe IDs
+        gene_list = []
+        for gene_name, probe_id in gene_mapping.items():
+            # Skip if it's a probe ID mapping to itself (not a real gene name)
+            if gene_name != probe_id:
+                gene_list.append({
+                    'gene_name': gene_name,
+                    'probe_id': probe_id,
+                    'display_name': f"{gene_name} ({probe_id})"
+                })
+        
+        # Sort by gene name for better organization
+        gene_list.sort(key=lambda x: x['gene_name'])
+        
         return jsonify({
             'success': True,
-            'genes': genes,
-            'count': len(genes)
+            'genes': gene_list
         })
+        
     except Exception as e:
-        return jsonify({'error': f'Error getting available genes: {str(e)}'}), 500
+        print(f"Error getting gene names: {e}")
+        # Fallback to probe IDs if gene mapping fails
+        available_genes = [col for col in data_manager.expression.columns if col != 'Sample']
+        return jsonify({
+            'success': True,
+            'genes': [{'gene_name': gene, 'probe_id': gene, 'display_name': gene} for gene in available_genes]
+        })
 
 @app.route('/available_columns')
 def available_columns():

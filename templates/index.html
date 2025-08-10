@@ -748,21 +748,22 @@
                                 <form id="geneExplorationForm">
                                     <div class="mb-3">
                                         <label for="geneNameExplore" class="form-label">Gene Name</label>
-                                        <input type="text" class="form-control" id="geneNameExplore" placeholder="e.g., EGFR, TP53, IDH1">
-                                        <div class="form-text">Enter gene symbol or probe ID</div>
+                                        <select class="form-select" id="geneNameExplore">
+                                            <option value="">Select a gene to explore...</option>
+                                        </select>
+                                        <div class="form-text">Choose a gene from your dataset</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="geneGroupBy" class="form-label">Group By</label>
-                                        <input type="text" class="form-control" id="geneGroupBy" value="grade" placeholder="grade">
+                                        <select class="form-select" id="geneGroupBy">
+                                            <option value="">Select a column to group by...</option>
+                                        </select>
                                         <div class="form-text">Metadata column to group samples</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="plotType" class="form-label">Plot Type</label>
                                         <select class="form-select" id="plotType">
-                                            <option value="violin">Violin Plot</option>
-                                            <option value="box">Box Plot</option>
                                             <option value="scatter">Scatter Plot</option>
-                                            <option value="heatmap">Sample Heatmap</option>
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-success">
@@ -812,22 +813,11 @@
                             <div class="card-body">
                                 <form id="chromosomeMappingForm">
                                     <div class="mb-3">
-                                        <label for="chromosomeGenes" class="form-label">Genes to Map</label>
-                                        <textarea class="form-control" id="chromosomeGenes" rows="4" placeholder="Enter gene names, one per line or comma-separated:&#10;EGFR, TP53, IDH1, PTEN"></textarea>
-                                        <div class="form-text">Enter multiple genes to see their chromosomal distribution</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="chromosomeFilter" class="form-label">Filter by Chromosome</label>
-                                        <select class="form-select" id="chromosomeFilter">
-                                            <option value="">All Chromosomes</option>
-                                            <option value="1">Chromosome 1</option>
-                                            <option value="2">Chromosome 2</option>
-                                            <option value="7">Chromosome 7</option>
-                                            <option value="10">Chromosome 10</option>
-                                            <option value="17">Chromosome 17</option>
-                                            <option value="X">Chromosome X</option>
-                                            <option value="Y">Chromosome Y</option>
+                                        <label for="chromosomeGene" class="form-label">Gene to Map</label>
+                                        <select class="form-select" id="chromosomeGene">
+                                            <option value="">Select a gene to map...</option>
                                         </select>
+                                        <div class="form-text">Choose a gene from your dataset to see its chromosomal location</div>
                                     </div>
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-map-marked-alt me-2"></i>Generate Chromosome Map
@@ -871,13 +861,17 @@
                             <div class="card-body">
                                 <form id="heatmapVizForm">
                                     <div class="mb-3">
-                                        <label for="heatmapGenesViz" class="form-label">Genes (comma-separated)</label>
-                                        <textarea class="form-control" id="heatmapGenesViz" rows="3" placeholder="EGFR, TP53, IDH1, PTEN, GFAP"></textarea>
-                                        <div class="form-text">Enter gene symbols separated by commas</div>
+                                        <label for="heatmapGenesViz" class="form-label">Genes to Include</label>
+                                        <select class="form-select" id="heatmapGenesViz" multiple>
+                                            <option value="">Select genes for heatmap...</option>
+                                        </select>
+                                        <div class="form-text">Hold Ctrl/Cmd to select multiple genes</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="heatmapGroupByViz" class="form-label">Group Samples By</label>
-                                        <input type="text" class="form-control" id="heatmapGroupByViz" placeholder="grade" value="grade">
+                                        <select class="form-select" id="heatmapGroupByViz">
+                                            <option value="">Select a column to group by...</option>
+                                        </select>
                                         <div class="form-text">Metadata column to group/cluster samples</div>
                                     </div>
                                     <div class="mb-3">
@@ -937,58 +931,82 @@
                     <p class="text-light">Help, documentation, and information</p>
                 </div>
                 <div class="row g-4">
+                    <!-- Author Section -->
+                    <div class="col-12 mb-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-user me-2"></i>About the Author</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 text-center">
+                                        <img src="/static/images/mishael_beppin.jpg" alt="Mishael Beppin" class="img-fluid mb-3" style="max-width: 150px; border-radius: 10px; object-fit: cover;">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <p class="text-light mb-3">
+                                            <em>Empowering you to explore and understand at the genomic level within Bioinformatics.</em>
+                                        </p>
+                                        <p class="text-light">
+                                            My name is <strong class="text-info">Mishael Beppin</strong> and I'm an MSc Genomic Medicine student with a keen interest in bioinformatics and cancer research. During my studies, I saw how complex and time-consuming it can be to work with large transcriptomic datasets, especially for researchers without a programming background. I created GliomaScope to make this process easier, providing an accessible platform for exploring glioma transcriptomes, uncovering patterns, and generating insights that could support both research and clinical understanding. This project combines my technical skills with my passion for turning genomic data into knowledge that can make a difference.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="col-lg-8">
                         <div class="card glass-card">
                             <div class="card-header">
                                 <h5><i class="fas fa-book me-2"></i>User Guide</h5>
                             </div>
                             <div class="card-body">
-                                <div class="user-guide">
-                                    <h6>Getting Started</h6>
-                                    <ol>
-                                        <li><strong>Data Upload:</strong> Use options 1-4 to load your data (GEO datasets or custom files)</li>
-                                        <li><strong>Data Exploration:</strong> Option 5 to explore and filter your dataset</li>
-                                        <li><strong>Visualization:</strong> Options 6-8 for geographic and dimensionality reduction plots</li>
-                                        <li><strong>Analysis:</strong> Options 9-12 for gene expression analysis and visualization</li>
+                                <div class="user-guide text-light">
+                                    <h6 class="text-white mb-3">Getting Started</h6>
+                                    <ol class="text-light">
+                                        <li class="mb-2"><strong class="text-info">Data Upload:</strong> <span class="text-light">Use options 1-4 to load your data (GEO datasets or custom files)</span></li>
+                                        <li class="mb-2"><strong class="text-info">Data Exploration:</strong> <span class="text-light">Option 5 to explore and filter your dataset</span></li>
+                                        <li class="mb-2"><strong class="text-info">Visualization:</strong> <span class="text-light">Options 6-8 for geographic and dimensionality reduction plots</span></li>
+                                        <li class="mb-2"><strong class="text-info">Analysis:</strong> <span class="text-light">Options 9-12 for gene expression analysis and visualization</span></li>
                                     </ol>
                                     
-                                    <h6 class="mt-4">Function Overview</h6>
+                                    <h6 class="mt-4 text-white mb-3">Function Overview</h6>
                                     <div class="function-list">
-                                        <div class="function-item">
-                                            <strong>1. GEO Dataset Download:</strong> Download and load datasets from NCBI GEO database
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">1. GEO Dataset Download:</strong> <span class="text-light">Download and load datasets from NCBI GEO database</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>2. Format Dataset:</strong> Upload and format your own CSV/TSV files
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">2. Format Dataset:</strong> <span class="text-light">Upload and format your own CSV/TSV files</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>3. Upload Metadata:</strong> Upload sample metadata files
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">3. Upload Metadata:</strong> <span class="text-light">Upload sample metadata files</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>4. Upload Expression:</strong> Upload gene expression data files
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">4. Upload Expression:</strong> <span class="text-light">Upload gene expression data files</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>5. Data Exploration:</strong> Explore, filter, and preview your data
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">5. Data Exploration:</strong> <span class="text-light">Explore, filter, and preview your data</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>6. Geographic Visualization:</strong> Create maps showing study locations
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">6. Geographic Visualization:</strong> <span class="text-light">Create maps showing study locations</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>7. PCA Analysis:</strong> Principal Component Analysis for dimensionality reduction
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">7. PCA Analysis:</strong> <span class="text-light">Principal Component Analysis for dimensionality reduction</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>8. UMAP Analysis:</strong> UMAP for non-linear dimensionality reduction
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">8. UMAP Analysis:</strong> <span class="text-light">UMAP for non-linear dimensionality reduction</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>9. Differential Expression:</strong> Compare gene expression between groups
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">9. Differential Expression:</strong> <span class="text-light">Compare gene expression between groups</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>10. Gene Exploration:</strong> Explore individual gene expression patterns
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">10. Gene Exploration:</strong> <span class="text-light">Explore individual gene expression patterns</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>11. Chromosome Mapping:</strong> Map genes to chromosomal locations
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">11. Chromosome Mapping:</strong> <span class="text-light">Map genes to chromosomal locations</span>
                                         </div>
-                                        <div class="function-item">
-                                            <strong>12. Heatmap Visualization:</strong> Generate expression heatmaps for gene sets
+                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
+                                            <strong class="text-warning">12. Heatmap Visualization:</strong> <span class="text-light">Generate expression heatmaps for gene sets</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1014,31 +1032,18 @@
                                 </div>
                                 
                                 <div class="mt-4">
-                                    <h6>System Information</h6>
-                                    <small class="text-muted">
-                                        <div>Version: 2.0.0</div>
-                                        <div>Platform: Web Application</div>
-                                        <div>Terminal: Available</div>
-                                        <div>Supported formats: CSV, TSV, TXT</div>
+                                    <h6 class="text-white">System Information</h6>
+                                    <small class="text-light">
+                                        <div class="mb-1"><strong class="text-info">Version:</strong> 2.0.0</div>
+                                        <div class="mb-1"><strong class="text-info">Platform:</strong> Web Application</div>
+                                        <div class="mb-1"><strong class="text-info">Terminal:</strong> Available</div>
+                                        <div class="mb-1"><strong class="text-info">Supported formats:</strong> CSV, TSV, TXT</div>
                                     </small>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="card glass-card mt-3">
-                            <div class="card-header">
-                                <h5><i class="fas fa-terminal me-2"></i>Terminal Access</h5>
-                            </div>
-                            <div class="card-body">
-                                <p class="text-muted small">
-                                    This web interface runs alongside the terminal version. 
-                                    All functions are available in both interfaces.
-                                </p>
-                                <button class="btn btn-outline-secondary btn-sm" onclick="alert('Terminal version: python Main.py')">
-                                    <i class="fas fa-terminal me-1"></i>Terminal Command
-                                </button>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

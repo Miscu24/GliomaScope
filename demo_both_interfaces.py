@@ -29,8 +29,8 @@ def demonstrate_terminal_functions():
     
     try:
         # Import terminal modules
-        from Data_loader import DataManager
-        from Utils import list_available_genes
+        from src.data_handling.Data_loader import DataManager
+        from src.utils.Utils import list_available_genes
         
         # Create data manager instance
         data_manager = DataManager()

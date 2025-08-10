@@ -187,6 +187,21 @@ class GliomaScopeApp {
         if (pageName === 'differential-expression') {
             setTimeout(() => this.populateDiffExpColumns(), 500);
         }
+        
+                        // Populate dropdowns for gene exploration when page is loaded
+                if (pageName === 'gene-exploration') {
+                    setTimeout(() => this.populateGeneExplorationDropdowns(), 500);
+                }
+                
+                // Populate dropdowns for chromosome mapping when page is loaded
+                if (pageName === 'chromosome-mapping') {
+                    setTimeout(() => this.populateChromosomeMappingDropdowns(), 500);
+                }
+                
+                // Populate dropdowns for heatmap when page is loaded
+                if (pageName === 'heatmap-viz') {
+                    setTimeout(() => this.populateHeatmapDropdowns(), 500);
+        }
     }
 
     async loadInitialWorldMap() {
@@ -401,12 +416,10 @@ class GliomaScopeApp {
     async handleChromosomeMapping(event) {
         event.preventDefault();
         
-        const formData = new FormData(event.target);
-        const genes = formData.get('chromosomeGenes').split(/[,\n]/).map(g => g.trim()).filter(g => g);
-        const chromosomeFilter = formData.get('chromosomeFilter');
+        const geneName = document.getElementById('chromosomeGene').value;
         
-        if (genes.length === 0) {
-            this.showAlert('Please enter at least one gene name.', 'warning');
+        if (!geneName) {
+            this.showAlert('Please select a gene to map.', 'warning');
             return;
         }
 
@@ -419,18 +432,21 @@ class GliomaScopeApp {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    genes: genes,
-                    chromosome_filter: chromosomeFilter
+                    gene_name: geneName
                 })
             });
             
             const result = await response.json();
             
             if (result.success) {
-                this.showAlert(`Chromosome mapping for ${genes.length} genes generated successfully`, 'success');
+                this.showAlert(result.message || 'Chromosome mapping generated successfully', 'success');
+                
+                // Clear the results area since plot opens in new tab
                 document.getElementById('chromosomeMappingResults').innerHTML = `
-                    <div class="plotly-container">
-                        ${result.plot_html}
+                    <div class="alert alert-success">
+                        <h6>Analysis Complete</h6>
+                        <p>${result.message}</p>
+                        <p>The chromosome mapping plot has been opened in a new browser tab.</p>
                     </div>
                 `;
             } else {
@@ -1848,6 +1864,140 @@ class GliomaScopeApp {
         }
     }
 
+    async populateGeneExplorationDropdowns() {
+        try {
+            // Populate genes dropdown
+            const genesResponse = await fetch('/available_genes');
+            const genesResult = await genesResponse.json();
+            
+            const geneSelect = document.getElementById('geneNameExplore');
+            if (geneSelect && genesResult.success) {
+                geneSelect.innerHTML = '<option value="">Select a gene to explore...</option>';
+                
+                // Handle new gene data structure (objects with gene_name, probe_id, display_name)
+                const genesToShow = genesResult.genes.slice(0, 1000);
+                genesToShow.forEach(geneObj => {
+                    const option = document.createElement('option');
+                    // Use probe_id as value (for backend processing)
+                    option.value = geneObj.probe_id || geneObj.gene_name || geneObj;
+                    // Use display_name for user-friendly display
+                    option.textContent = geneObj.display_name || geneObj.gene_name || geneObj;
+                    geneSelect.appendChild(option);
+                });
+                
+                if (genesResult.genes.length > 1000) {
+                    const option = document.createElement('option');
+                    option.value = "";
+                    option.textContent = `... and ${genesResult.genes.length - 1000} more genes`;
+                    option.disabled = true;
+                    geneSelect.appendChild(option);
+                }
+            }
+            
+            // Populate group columns dropdown
+            const columnsResponse = await fetch('/available_columns');
+            const columnsResult = await columnsResponse.json();
+            
+            const groupSelect = document.getElementById('geneGroupBy');
+            if (groupSelect && columnsResult.success) {
+                groupSelect.innerHTML = '<option value="">Select a column to group by...</option>';
+                
+                columnsResult.columns.forEach(column => {
+                    const option = document.createElement('option');
+                    option.value = column;
+                    option.textContent = column;
+                    groupSelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error populating gene exploration dropdowns:', error);
+        }
+    }
+
+    async populateChromosomeMappingDropdowns() {
+        try {
+            // Populate genes dropdown for chromosome mapping
+            const genesResponse = await fetch('/available_genes');
+            const genesResult = await genesResponse.json();
+            
+            const geneSelect = document.getElementById('chromosomeGene');
+            if (geneSelect && genesResult.success) {
+                geneSelect.innerHTML = '<option value="">Select a gene to map...</option>';
+                
+                // Handle new gene data structure (objects with gene_name, probe_id, display_name)
+                const genesToShow = genesResult.genes.slice(0, 1000); // Limit to first 1000 genes
+                genesToShow.forEach(geneObj => {
+                    const option = document.createElement('option');
+                    // Use gene_name as value (for chromosome mapping, we want the actual gene name)
+                    option.value = geneObj.gene_name || geneObj.probe_id || geneObj;
+                    // Use display_name for user-friendly display
+                    option.textContent = geneObj.display_name || geneObj.gene_name || geneObj;
+                    geneSelect.appendChild(option);
+                });
+                
+                if (genesResult.genes.length > 1000) {
+                    const option = document.createElement('option');
+                    option.value = "";
+                    option.textContent = `... and ${genesResult.genes.length - 1000} more genes`;
+                    option.disabled = true;
+                    geneSelect.appendChild(option);
+                }
+            }
+        } catch (error) {
+            console.error('Error populating chromosome mapping dropdowns:', error);
+        }
+    }
+
+    async populateHeatmapDropdowns() {
+        try {
+            // Populate genes dropdown for heatmap
+            const genesResponse = await fetch('/available_genes');
+            const genesResult = await genesResponse.json();
+            
+            const geneSelect = document.getElementById('heatmapGenesViz');
+            if (geneSelect && genesResult.success) {
+                geneSelect.innerHTML = '<option value="">Select genes for heatmap...</option>';
+                
+                // Handle new gene data structure (objects with gene_name, probe_id, display_name)
+                const genesToShow = genesResult.genes.slice(0, 500); // Limit to first 500 genes for heatmap
+                genesToShow.forEach(geneObj => {
+                    const option = document.createElement('option');
+                    // Use gene_name as value (for heatmap, we want the actual gene name)
+                    option.value = geneObj.gene_name || geneObj.probe_id || geneObj;
+                    // Use display_name for user-friendly display
+                    option.textContent = geneObj.display_name || geneObj.gene_name || geneObj;
+                    geneSelect.appendChild(option);
+                });
+                
+                if (genesResult.genes.length > 500) {
+                    const option = document.createElement('option');
+                    option.value = "";
+                    option.textContent = `... and ${genesResult.genes.length - 500} more genes`;
+                    option.disabled = true;
+                    geneSelect.appendChild(option);
+                }
+            }
+            
+            // Populate group columns dropdown
+            const columnsResponse = await fetch('/available_columns');
+            const columnsResult = await columnsResponse.json();
+            
+            const groupSelect = document.getElementById('heatmapGroupByViz');
+            if (groupSelect && columnsResult.success) {
+                groupSelect.innerHTML = '<option value="">Select a column to group by...</option>';
+                
+                columnsResult.columns.forEach(column => {
+                    const option = document.createElement('option');
+                    option.value = column;
+                    option.textContent = column;
+                    groupSelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error populating heatmap dropdowns:', error);
+        }
+    }
+
     async handlePCA(event) {
         event.preventDefault();
         
@@ -1927,16 +2077,18 @@ class GliomaScopeApp {
     async handleGeneExpression(event) {
         event.preventDefault();
         
-        const formData = new FormData(event.target);
-        const data = {
-            gene_name: formData.get('geneName') || formData.get('geneNameExplore'),
-            group_col: formData.get('geneGroupBy')
-        };
-
-        if (!data.gene_name) {
-            this.showAlert('Please enter a gene name', 'warning');
+        const geneName = document.getElementById('geneNameExplore').value;
+        const groupCol = document.getElementById('geneGroupBy').value;
+        
+        if (!geneName || !groupCol) {
+            this.showAlert('Please select both a gene and a grouping column', 'warning');
             return;
         }
+
+        const data = {
+            gene_name: geneName,
+            group_col: groupCol
+        };
 
         this.showLoading();
         
@@ -1952,10 +2104,14 @@ class GliomaScopeApp {
             const result = await response.json();
             
             if (result.success) {
-                this.showAlert(`Gene expression plot for ${data.gene_name} generated successfully`, 'success');
+                this.showAlert(result.message || 'Gene expression plot generated successfully', 'success');
+                
+                // Clear the results area since plot opens in new tab
                 document.getElementById('geneExpResults').innerHTML = `
-                    <div class="plotly-container">
-                        ${result.plot_html}
+                    <div class="alert alert-success">
+                        <h6>Analysis Complete</h6>
+                        <p>${result.message}</p>
+                        <p>The gene expression plot has been opened in a new browser tab.</p>
                     </div>
                 `;
             } else {
@@ -2057,18 +2213,20 @@ class GliomaScopeApp {
     async handleHeatmap(event) {
         event.preventDefault();
         
-        const formData = new FormData(event.target);
-        const genesInput = formData.get('heatmapGenes') || formData.get('heatmapGenesViz');
-        const genes = genesInput.split(/[,\n]/).map(g => g.trim()).filter(g => g);
+        // Get selected genes from the multiple select dropdown
+        const geneSelect = document.getElementById('heatmapGenesViz');
+        const selectedGenes = Array.from(geneSelect.selectedOptions).map(option => option.value).filter(value => value);
         
-        if (genes.length === 0) {
-            this.showAlert('Please enter at least one gene name', 'warning');
+        if (selectedGenes.length === 0) {
+            this.showAlert('Please select at least one gene', 'warning');
             return;
         }
 
+        const groupCol = document.getElementById('heatmapGroupByViz').value;
+
         const data = {
-            genes: genes,
-            group_col: formData.get('heatmapGroupBy') || formData.get('heatmapGroupByViz') || null
+            genes: selectedGenes,
+            group_col: groupCol || null
         };
 
         this.showLoading();
@@ -2085,10 +2243,14 @@ class GliomaScopeApp {
             const result = await response.json();
             
             if (result.success) {
-                this.showAlert(`Heatmap for ${genes.length} genes generated successfully`, 'success');
+                this.showAlert(result.message || 'Heatmap generated successfully', 'success');
+                
+                // Clear the results area since plot opens in new tab
                 document.getElementById('heatmapResults').innerHTML = `
-                    <div class="plotly-container">
-                        ${result.plot_html}
+                    <div class="alert alert-success">
+                        <h6>Analysis Complete</h6>
+                        <p>${result.message}</p>
+                        <p>The heatmap has been opened in a new browser tab.</p>
                     </div>
                 `;
             } else {
