@@ -44,7 +44,7 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Generated plots and analysis files
+# Generated plots and analysis files (HTML, images, data)
 *.html
 *.png
 *.jpg
@@ -58,22 +58,35 @@ Thumbs.db
 !requirements.txt
 !README.md
 !WEB_INTERFACE_README.md
+!PROJECT_SUMMARY.md
 !gene_annotation.csv
+!dummy_gene1.csv
 
-# Data files
+# Data files and directories
 cleaned_data/
 uploads/
-output_with_coords.csv
-filtered_metadata_results.html
-
-# Logs
 logs/
-*.log
-
-# Temporary files
 temp/
 tmp/
 *.tmp
+
+# Generated analysis files
+output_with_coords.csv
+filtered_metadata_results.html
+differential_expression_*.html
+gene_expression_*.html
+gene_chromosome_*.html
+heatmap_*.html
+pca_plot_*.html
+umap_plot_*.html
+geomap_*.html
+world_map.html
+institution_*.html
+study_*.html
+glioma_*.html
+
+# Logs
+*.log
 
 # Flask
 instance/
@@ -90,4 +103,53 @@ instance/
 .env.local
 .env.development.local
 .env.test.local
-.env.production.local 
+.env.production.local
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Temporary Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# Pyre type checker
+.pyre/
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Project-specific generated files
+dummy_expression*.csv
+dummy_metadata*.csv 
