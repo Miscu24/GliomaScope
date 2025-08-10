@@ -1,0 +1,14 @@
+{
+    "name": "Metadata",
+    "shape": {
+        "rows": 10,
+        "columns": 5
+    },
+    "data_type": "metadata",
+    "missing_values": 0,
+    "duplicated_rows": 0,
+    "numeric_columns": [
+        "tumor_grade",
+        "age"
+    ]
+}

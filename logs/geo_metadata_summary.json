@@ -1,0 +1,11 @@
+{
+    "name": "GEO_Metadata",
+    "shape": {
+        "rows": 284,
+        "columns": 35
+    },
+    "data_type": "unknown",
+    "missing_values": 272,
+    "duplicated_rows": 0,
+    "numeric_columns": []
+}

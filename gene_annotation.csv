@@ -1,0 +1,411 @@
+Probe_ID,Gene_Symbol,Gene_Name
+1007_s_at,CDKN2A,Cyclin Dependent Kinase Inhibitor 2A
+1053_at,CDKN2B,Cyclin Dependent Kinase Inhibitor 2B
+117_at,CDKN2A,Cyclin Dependent Kinase Inhibitor 2A
+121_at,CDKN2B,Cyclin Dependent Kinase Inhibitor 2B
+1255_g_at,CDKN2A,Cyclin Dependent Kinase Inhibitor 2A
+1294_at,CDKN2B,Cyclin Dependent Kinase Inhibitor 2B
+1316_at,CDKN2A,Cyclin Dependent Kinase Inhibitor 2A
+1320_at,CDKN2B,Cyclin Dependent Kinase Inhibitor 2B
+1405_i_at,CDKN2A,Cyclin Dependent Kinase Inhibitor 2A
+1000_at,TP53,Tumor Protein P53
+10000_at,EGFR,Epidermal Growth Factor Receptor
+10001_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+10002_at,IDH1,Isocitrate Dehydrogenase 1
+10003_at,ATRX,ATRX Chromatin Remodeler
+10004_at,PTEN,Phosphatase and Tensin Homolog
+10005_at,PIK3CA,PIK3CA Protein
+10006_at,NF1,Neurofibromin 1
+10007_at,TP53,Tumor Protein P53
+10008_at,EGFR,Epidermal Growth Factor Receptor
+10009_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+10010_at,IDH1,Isocitrate Dehydrogenase 1
+10011_at,ATRX,ATRX Chromatin Remodeler
+10013_at,PTEN,Phosphatase and Tensin Homolog
+10014_at,PIK3CA,PIK3CA Protein
+10015_at,NF1,Neurofibromin 1
+10016_at,TP53,Tumor Protein P53
+10017_at,EGFR,Epidermal Growth Factor Receptor
+10018_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+10019_at,IDH1,Isocitrate Dehydrogenase 1
+10020_at,ATRX,ATRX Chromatin Remodeler
+10021_at,PTEN,Phosphatase and Tensin Homolog
+10022_at,PIK3CA,PIK3CA Protein
+10023_at,NF1,Neurofibromin 1
+10024_at,TP53,Tumor Protein P53
+10025_at,EGFR,Epidermal Growth Factor Receptor
+10026_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+10027_at,IDH1,Isocitrate Dehydrogenase 1
+10028_at,ATRX,ATRX Chromatin Remodeler
+10029_at,PTEN,Phosphatase and Tensin Homolog
+10030_at,PIK3CA,PIK3CA Protein
+10031_at,NF1,Neurofibromin 1
+10032_at,TP53,Tumor Protein P53
+10033_at,EGFR,Epidermal Growth Factor Receptor
+10034_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+10035_at,IDH1,Isocitrate Dehydrogenase 1
+10036_at,ATRX,ATRX Chromatin Remodeler
+10037_at,PTEN,Phosphatase and Tensin Homolog
+10038_at,PIK3CA,PIK3CA Protein
+10039_at,NF1,Neurofibromin 1
+10040_at,TP53,Tumor Protein P53
+10041_at,EGFR,Epidermal Growth Factor Receptor
+10042_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+10043_at,IDH1,Isocitrate Dehydrogenase 1
+10044_at,ATRX,ATRX Chromatin Remodeler
+10045_at,PTEN,Phosphatase and Tensin Homolog
+10046_at,PIK3CA,PIK3CA Protein
+10047_at,NF1,Neurofibromin 1
+10048_at,TP53,Tumor Protein P53
+10049_at,EGFR,Epidermal Growth Factor Receptor
+10050_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9650_at,IDH1,Isocitrate Dehydrogenase 1
+9651_at,ATRX,ATRX Chromatin Remodeler
+9652_at,PTEN,Phosphatase and Tensin Homolog
+9653_at,PIK3CA,PIK3CA Protein
+9654_at,NF1,Neurofibromin 1
+9655_at,TP53,Tumor Protein P53
+9656_at,EGFR,Epidermal Growth Factor Receptor
+9657_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9658_at,IDH1,Isocitrate Dehydrogenase 1
+9659_at,ATRX,ATRX Chromatin Remodeler
+9660_at,PTEN,Phosphatase and Tensin Homolog
+9661_at,PIK3CA,PIK3CA Protein
+9662_at,NF1,Neurofibromin 1
+9663_at,TP53,Tumor Protein P53
+9664_at,EGFR,Epidermal Growth Factor Receptor
+9665_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9666_at,IDH1,Isocitrate Dehydrogenase 1
+9667_at,ATRX,ATRX Chromatin Remodeler
+9668_at,PTEN,Phosphatase and Tensin Homolog
+9669_at,PIK3CA,PIK3CA Protein
+9670_at,NF1,Neurofibromin 1
+9671_at,TP53,Tumor Protein P53
+9672_at,EGFR,Epidermal Growth Factor Receptor
+9673_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9674_at,IDH1,Isocitrate Dehydrogenase 1
+9675_at,ATRX,ATRX Chromatin Remodeler
+9676_at,PTEN,Phosphatase and Tensin Homolog
+9677_at,PIK3CA,PIK3CA Protein
+9678_at,NF1,Neurofibromin 1
+9679_at,TP53,Tumor Protein P53
+9680_at,EGFR,Epidermal Growth Factor Receptor
+9681_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9682_at,IDH1,Isocitrate Dehydrogenase 1
+9683_at,ATRX,ATRX Chromatin Remodeler
+9684_at,PTEN,Phosphatase and Tensin Homolog
+9685_at,PIK3CA,PIK3CA Protein
+9686_at,NF1,Neurofibromin 1
+9687_at,TP53,Tumor Protein P53
+9688_at,EGFR,Epidermal Growth Factor Receptor
+9689_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9690_at,IDH1,Isocitrate Dehydrogenase 1
+9691_at,ATRX,ATRX Chromatin Remodeler
+9692_at,PTEN,Phosphatase and Tensin Homolog
+9693_at,PIK3CA,PIK3CA Protein
+9694_at,NF1,Neurofibromin 1
+9695_at,TP53,Tumor Protein P53
+9696_at,EGFR,Epidermal Growth Factor Receptor
+9697_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9698_at,IDH1,Isocitrate Dehydrogenase 1
+9699_at,ATRX,ATRX Chromatin Remodeler
+9700_at,PTEN,Phosphatase and Tensin Homolog
+9701_at,PIK3CA,PIK3CA Protein
+9702_at,NF1,Neurofibromin 1
+9703_at,TP53,Tumor Protein P53
+9704_at,EGFR,Epidermal Growth Factor Receptor
+9705_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9706_at,IDH1,Isocitrate Dehydrogenase 1
+9707_at,ATRX,ATRX Chromatin Remodeler
+9708_at,PTEN,Phosphatase and Tensin Homolog
+9709_at,PIK3CA,PIK3CA Protein
+9710_at,NF1,Neurofibromin 1
+9711_at,TP53,Tumor Protein P53
+9712_at,EGFR,Epidermal Growth Factor Receptor
+9713_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9714_at,IDH1,Isocitrate Dehydrogenase 1
+9715_at,ATRX,ATRX Chromatin Remodeler
+9716_at,PTEN,Phosphatase and Tensin Homolog
+9717_at,PIK3CA,PIK3CA Protein
+9718_at,NF1,Neurofibromin 1
+9719_at,TP53,Tumor Protein P53
+9720_at,EGFR,Epidermal Growth Factor Receptor
+9721_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9722_at,IDH1,Isocitrate Dehydrogenase 1
+9723_at,ATRX,ATRX Chromatin Remodeler
+9724_at,PTEN,Phosphatase and Tensin Homolog
+9725_at,PIK3CA,PIK3CA Protein
+9726_at,NF1,Neurofibromin 1
+9727_at,TP53,Tumor Protein P53
+9728_at,EGFR,Epidermal Growth Factor Receptor
+9729_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9730_at,IDH1,Isocitrate Dehydrogenase 1
+9731_at,ATRX,ATRX Chromatin Remodeler
+9732_at,PTEN,Phosphatase and Tensin Homolog
+9733_at,PIK3CA,PIK3CA Protein
+9734_at,NF1,Neurofibromin 1
+9735_at,TP53,Tumor Protein P53
+9736_at,EGFR,Epidermal Growth Factor Receptor
+9737_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9738_at,IDH1,Isocitrate Dehydrogenase 1
+9739_at,ATRX,ATRX Chromatin Remodeler
+9740_at,PTEN,Phosphatase and Tensin Homolog
+9741_at,PIK3CA,PIK3CA Protein
+9742_at,NF1,Neurofibromin 1
+9743_at,TP53,Tumor Protein P53
+9744_at,EGFR,Epidermal Growth Factor Receptor
+9745_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9746_at,IDH1,Isocitrate Dehydrogenase 1
+9747_at,ATRX,ATRX Chromatin Remodeler
+9748_at,PTEN,Phosphatase and Tensin Homolog
+9749_at,PIK3CA,PIK3CA Protein
+9750_at,NF1,Neurofibromin 1
+9751_at,TP53,Tumor Protein P53
+9752_at,EGFR,Epidermal Growth Factor Receptor
+9753_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9754_at,IDH1,Isocitrate Dehydrogenase 1
+9755_at,ATRX,ATRX Chromatin Remodeler
+9756_at,PTEN,Phosphatase and Tensin Homolog
+9757_at,PIK3CA,PIK3CA Protein
+9758_at,NF1,Neurofibromin 1
+9759_at,TP53,Tumor Protein P53
+9760_at,EGFR,Epidermal Growth Factor Receptor
+9761_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9762_at,IDH1,Isocitrate Dehydrogenase 1
+9763_at,ATRX,ATRX Chromatin Remodeler
+9764_at,PTEN,Phosphatase and Tensin Homolog
+9765_at,PIK3CA,PIK3CA Protein
+9766_at,NF1,Neurofibromin 1
+9767_at,TP53,Tumor Protein P53
+9768_at,EGFR,Epidermal Growth Factor Receptor
+9769_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9770_at,IDH1,Isocitrate Dehydrogenase 1
+9771_at,ATRX,ATRX Chromatin Remodeler
+9772_at,PTEN,Phosphatase and Tensin Homolog
+9773_at,PIK3CA,PIK3CA Protein
+9774_at,NF1,Neurofibromin 1
+9775_at,TP53,Tumor Protein P53
+9776_at,EGFR,Epidermal Growth Factor Receptor
+9777_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9778_at,IDH1,Isocitrate Dehydrogenase 1
+9779_at,ATRX,ATRX Chromatin Remodeler
+9780_at,PTEN,Phosphatase and Tensin Homolog
+9781_at,PIK3CA,PIK3CA Protein
+9782_at,NF1,Neurofibromin 1
+9783_at,TP53,Tumor Protein P53
+9784_at,EGFR,Epidermal Growth Factor Receptor
+9785_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9786_at,IDH1,Isocitrate Dehydrogenase 1
+9787_at,ATRX,ATRX Chromatin Remodeler
+9788_at,PTEN,Phosphatase and Tensin Homolog
+9789_at,PIK3CA,PIK3CA Protein
+9790_at,NF1,Neurofibromin 1
+9791_at,TP53,Tumor Protein P53
+9792_at,EGFR,Epidermal Growth Factor Receptor
+9793_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9794_at,IDH1,Isocitrate Dehydrogenase 1
+9795_at,ATRX,ATRX Chromatin Remodeler
+9796_at,PTEN,Phosphatase and Tensin Homolog
+9797_at,PIK3CA,PIK3CA Protein
+9798_at,NF1,Neurofibromin 1
+9799_at,TP53,Tumor Protein P53
+9800_at,EGFR,Epidermal Growth Factor Receptor
+9801_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9802_at,IDH1,Isocitrate Dehydrogenase 1
+9803_at,ATRX,ATRX Chromatin Remodeler
+9804_at,PTEN,Phosphatase and Tensin Homolog
+9805_at,PIK3CA,PIK3CA Protein
+9806_at,NF1,Neurofibromin 1
+9807_at,TP53,Tumor Protein P53
+9808_at,EGFR,Epidermal Growth Factor Receptor
+9809_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9810_at,IDH1,Isocitrate Dehydrogenase 1
+9811_at,ATRX,ATRX Chromatin Remodeler
+9812_at,PTEN,Phosphatase and Tensin Homolog
+9813_at,PIK3CA,PIK3CA Protein
+9814_at,NF1,Neurofibromin 1
+9815_at,TP53,Tumor Protein P53
+9816_at,EGFR,Epidermal Growth Factor Receptor
+9817_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9818_at,IDH1,Isocitrate Dehydrogenase 1
+9819_at,ATRX,ATRX Chromatin Remodeler
+9820_at,PTEN,Phosphatase and Tensin Homolog
+9821_at,PIK3CA,PIK3CA Protein
+9822_at,NF1,Neurofibromin 1
+9823_at,TP53,Tumor Protein P53
+9824_at,EGFR,Epidermal Growth Factor Receptor
+9825_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9826_at,IDH1,Isocitrate Dehydrogenase 1
+9827_at,ATRX,ATRX Chromatin Remodeler
+9828_at,PTEN,Phosphatase and Tensin Homolog
+9829_at,PIK3CA,PIK3CA Protein
+9830_at,NF1,Neurofibromin 1
+9831_at,TP53,Tumor Protein P53
+9832_at,EGFR,Epidermal Growth Factor Receptor
+9833_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9834_at,IDH1,Isocitrate Dehydrogenase 1
+9835_at,ATRX,ATRX Chromatin Remodeler
+9836_at,PTEN,Phosphatase and Tensin Homolog
+9837_at,PIK3CA,PIK3CA Protein
+9838_at,NF1,Neurofibromin 1
+9839_at,TP53,Tumor Protein P53
+9840_at,EGFR,Epidermal Growth Factor Receptor
+9841_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9842_at,IDH1,Isocitrate Dehydrogenase 1
+9843_at,ATRX,ATRX Chromatin Remodeler
+9844_at,PTEN,Phosphatase and Tensin Homolog
+9845_at,PIK3CA,PIK3CA Protein
+9846_at,NF1,Neurofibromin 1
+9847_at,TP53,Tumor Protein P53
+9848_at,EGFR,Epidermal Growth Factor Receptor
+9849_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9850_at,IDH1,Isocitrate Dehydrogenase 1
+9851_at,ATRX,ATRX Chromatin Remodeler
+9852_at,PTEN,Phosphatase and Tensin Homolog
+9853_at,PIK3CA,PIK3CA Protein
+9854_at,NF1,Neurofibromin 1
+9855_at,TP53,Tumor Protein P53
+9856_at,EGFR,Epidermal Growth Factor Receptor
+9857_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9858_at,IDH1,Isocitrate Dehydrogenase 1
+9859_at,ATRX,ATRX Chromatin Remodeler
+9860_at,PTEN,Phosphatase and Tensin Homolog
+9861_at,PIK3CA,PIK3CA Protein
+9862_at,NF1,Neurofibromin 1
+9863_at,TP53,Tumor Protein P53
+9864_at,EGFR,Epidermal Growth Factor Receptor
+9865_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9866_at,IDH1,Isocitrate Dehydrogenase 1
+9867_at,ATRX,ATRX Chromatin Remodeler
+9868_at,PTEN,Phosphatase and Tensin Homolog
+9869_at,PIK3CA,PIK3CA Protein
+9870_at,NF1,Neurofibromin 1
+9871_at,TP53,Tumor Protein P53
+9872_at,EGFR,Epidermal Growth Factor Receptor
+9873_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9874_at,IDH1,Isocitrate Dehydrogenase 1
+9875_at,ATRX,ATRX Chromatin Remodeler
+9876_at,PTEN,Phosphatase and Tensin Homolog
+9877_at,PIK3CA,PIK3CA Protein
+9878_at,NF1,Neurofibromin 1
+9879_at,TP53,Tumor Protein P53
+9880_at,EGFR,Epidermal Growth Factor Receptor
+9881_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9882_at,IDH1,Isocitrate Dehydrogenase 1
+9883_at,ATRX,ATRX Chromatin Remodeler
+9884_at,PTEN,Phosphatase and Tensin Homolog
+9885_at,PIK3CA,PIK3CA Protein
+9886_at,NF1,Neurofibromin 1
+9887_at,TP53,Tumor Protein P53
+9888_at,EGFR,Epidermal Growth Factor Receptor
+9889_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9890_at,IDH1,Isocitrate Dehydrogenase 1
+9891_at,ATRX,ATRX Chromatin Remodeler
+9892_at,PTEN,Phosphatase and Tensin Homolog
+9893_at,PIK3CA,PIK3CA Protein
+9894_at,NF1,Neurofibromin 1
+9895_at,TP53,Tumor Protein P53
+9896_at,EGFR,Epidermal Growth Factor Receptor
+9897_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9898_at,IDH1,Isocitrate Dehydrogenase 1
+9899_at,ATRX,ATRX Chromatin Remodeler
+9900_at,PTEN,Phosphatase and Tensin Homolog
+9901_at,PIK3CA,PIK3CA Protein
+9902_at,NF1,Neurofibromin 1
+9903_at,TP53,Tumor Protein P53
+9904_at,EGFR,Epidermal Growth Factor Receptor
+9905_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9906_at,IDH1,Isocitrate Dehydrogenase 1
+9907_at,ATRX,ATRX Chromatin Remodeler
+9908_at,PTEN,Phosphatase and Tensin Homolog
+9909_at,PIK3CA,PIK3CA Protein
+9910_at,NF1,Neurofibromin 1
+9911_at,TP53,Tumor Protein P53
+9912_at,EGFR,Epidermal Growth Factor Receptor
+9913_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9914_at,IDH1,Isocitrate Dehydrogenase 1
+9915_at,ATRX,ATRX Chromatin Remodeler
+9916_at,PTEN,Phosphatase and Tensin Homolog
+9917_at,PIK3CA,PIK3CA Protein
+9918_at,NF1,Neurofibromin 1
+9919_at,TP53,Tumor Protein P53
+9920_at,EGFR,Epidermal Growth Factor Receptor
+9921_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9922_at,IDH1,Isocitrate Dehydrogenase 1
+9923_at,ATRX,ATRX Chromatin Remodeler
+9924_at,PTEN,Phosphatase and Tensin Homolog
+9925_at,PIK3CA,PIK3CA Protein
+9926_at,NF1,Neurofibromin 1
+9927_at,TP53,Tumor Protein P53
+9928_at,EGFR,Epidermal Growth Factor Receptor
+9929_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9930_at,IDH1,Isocitrate Dehydrogenase 1
+9931_at,ATRX,ATRX Chromatin Remodeler
+9932_at,PTEN,Phosphatase and Tensin Homolog
+9933_at,PIK3CA,PIK3CA Protein
+9934_at,NF1,Neurofibromin 1
+9935_at,TP53,Tumor Protein P53
+9936_at,EGFR,Epidermal Growth Factor Receptor
+9937_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9938_at,IDH1,Isocitrate Dehydrogenase 1
+9939_at,ATRX,ATRX Chromatin Remodeler
+9940_at,PTEN,Phosphatase and Tensin Homolog
+9941_at,PIK3CA,PIK3CA Protein
+9942_at,NF1,Neurofibromin 1
+9943_at,TP53,Tumor Protein P53
+9944_at,EGFR,Epidermal Growth Factor Receptor
+9945_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9946_at,IDH1,Isocitrate Dehydrogenase 1
+9947_at,ATRX,ATRX Chromatin Remodeler
+9948_at,PTEN,Phosphatase and Tensin Homolog
+9949_at,PIK3CA,PIK3CA Protein
+9950_at,NF1,Neurofibromin 1
+9951_at,TP53,Tumor Protein P53
+9952_at,EGFR,Epidermal Growth Factor Receptor
+9953_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9954_at,IDH1,Isocitrate Dehydrogenase 1
+9955_at,ATRX,ATRX Chromatin Remodeler
+9956_at,PTEN,Phosphatase and Tensin Homolog
+9957_at,PIK3CA,PIK3CA Protein
+9958_at,NF1,Neurofibromin 1
+9959_at,TP53,Tumor Protein P53
+9960_at,EGFR,Epidermal Growth Factor Receptor
+9961_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9962_at,IDH1,Isocitrate Dehydrogenase 1
+9963_at,ATRX,ATRX Chromatin Remodeler
+9964_at,PTEN,Phosphatase and Tensin Homolog
+9965_at,PIK3CA,PIK3CA Protein
+9966_at,NF1,Neurofibromin 1
+9967_at,TP53,Tumor Protein P53
+9968_at,EGFR,Epidermal Growth Factor Receptor
+9969_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9970_at,IDH1,Isocitrate Dehydrogenase 1
+9971_at,ATRX,ATRX Chromatin Remodeler
+9972_at,PTEN,Phosphatase and Tensin Homolog
+9973_at,PIK3CA,PIK3CA Protein
+9974_at,NF1,Neurofibromin 1
+9975_at,TP53,Tumor Protein P53
+9976_at,EGFR,Epidermal Growth Factor Receptor
+9977_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9978_at,IDH1,Isocitrate Dehydrogenase 1
+9979_at,ATRX,ATRX Chromatin Remodeler
+9980_at,PTEN,Phosphatase and Tensin Homolog
+9981_at,PIK3CA,PIK3CA Protein
+9982_at,NF1,Neurofibromin 1
+9983_at,TP53,Tumor Protein P53
+9984_at,EGFR,Epidermal Growth Factor Receptor
+9985_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9986_at,IDH1,Isocitrate Dehydrogenase 1
+9987_at,ATRX,ATRX Chromatin Remodeler
+9988_at,PTEN,Phosphatase and Tensin Homolog
+9989_at,PIK3CA,PIK3CA Protein
+9990_at,NF1,Neurofibromin 1
+9991_at,TP53,Tumor Protein P53
+9992_at,EGFR,Epidermal Growth Factor Receptor
+9993_at,MGMT,O-6-Methylguanine-DNA Methyltransferase
+9994_at,IDH1,Isocitrate Dehydrogenase 1
+9995_at,ATRX,ATRX Chromatin Remodeler
+9996_at,PTEN,Phosphatase and Tensin Homolog
+9997_at,PIK3CA,PIK3CA Protein
+9998_at,NF1,Neurofibromin 1
+9999_at,TP53,Tumor Protein P53 

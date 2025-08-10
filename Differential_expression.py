@@ -13,11 +13,11 @@ def perform_differential_expression(expression_df, metadata_df, group_col='grade
 
     #step1. merge metadata and expression data
     expr = expression_df.copy()
-    merged = pd.merge(expr, metadata_df[['Sample_ID', group_col]], on='Sample_ID', how='inner')
+    merged = pd.merge(expr, metadata_df[['Sample', group_col]], on='Sample', how='inner')
 
     #step2 filter for the two groups of intrest 
     filtered = merged[merged[group_col].isin([group_1, group_2])]
-    filtered = filtered.set_index('Sample_ID')
+    filtered = filtered.set_index('Sample')
 
     #step 3 to fit into groups
     group1_df = filtered[filtered[group_col] == group_1].drop(columns=[group_col])
@@ -51,21 +51,29 @@ def perform_differential_expression(expression_df, metadata_df, group_col='grade
         result_df,
         x='log2FC',
         y='-log10(p_value)',
-        text='Gene',
+        hover_name='Gene',
         title=f"Differential Expression: {group_1} vs {group_2}",
         color = result_df['p_value'] < 0.05,
         labels={'color': 'Significant (p-value < 0.05)'}
     )
 
-    fig.update_traces(marker=dict(size=8, opacity=0.8), textposition='top center')
-    fig.show(renderer="browser")
+    fig.update_traces(marker=dict(size=8, opacity=0.8))
     
+    # Save plot to HTML file
+    plot_filename = f"differential_expression_{group_1}_vs_{group_2}.html"
+    fig.write_html(plot_filename)
+    print(f"Differential expression plot saved to '{plot_filename}'")
     
-    #if show_plot:
-        #fig.show(renderer="browser")
+    # Show plot in browser (non-blocking)
+    try:
+        import subprocess
+        subprocess.Popen(['open', plot_filename], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print("Plot opened in your browser.")
+    except Exception as e:
+        print(f"Could not open plot automatically. Please open '{plot_filename}' manually in your browser.")
     
-    #if save_path:
-       #result_df.to_csv(save_path, index=False)
-        #print(f"Results saved to {save_path}.")
+    if save_path:
+        result_df.to_csv(save_path, index=False)
+        print(f"Results saved to {save_path}.")
 
     return result_df.sort_values('p_value')

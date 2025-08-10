@@ -4,6 +4,11 @@ from Data_loader import DataManager
 
 def process_upload(file_path, data_manager, missing_method='fill_zero', save_cleaned=True):
     df = load_data(file_path)
+    
+    # Apply column name simplifications for metadata files
+    if validate_file_type(df) == 'metadata':
+        df = auto_rename_metadata_columns(df)
+    
     df_cleaned = handle_missing_data(df, missing_method)
     
     file_type = validate_file_type(df_cleaned)

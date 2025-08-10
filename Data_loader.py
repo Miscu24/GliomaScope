@@ -1,6 +1,7 @@
 import pandas as pd
 import os
-from Utils import load_data, validate_file_type, handle_missing_data
+from Utils import load_data, handle_missing_data, validate_file_type, auto_rename_metadata_columns
+
 
 class DataManager:
     def __init__(self):
@@ -22,19 +23,21 @@ class DataManager:
             print(f"[Error] Failed to load file: {e}")
             return
 
-        # Standardize Sample_ID
-        if 'Sample_ID' not in df.columns:
+        df = auto_rename_metadata_columns(df)
+
+        # Standardize Sample
+        if 'Sample' not in df.columns:
             for col in df.columns:
                 if 'sample' in col.lower() and 'id' in col.lower():
-                    df.rename(columns={col: 'Sample_ID'}, inplace=True)
+                    df.rename(columns={col: 'Sample'}, inplace=True)
                     break
 
-        if 'Sample_ID' not in df.columns:
-            print("[Error] 'Sample_ID' column missing.")
+        if 'Sample' not in df.columns:
+            print("[Error] 'Sample' column missing.")
             return
 
         # Identify type
-        file_type = validate_file_type(df)
+        file_type = validate_file_type(df).lower().capitalize()
         print(f"Detected file type: {file_type}")
 
         # Handle missing values
@@ -48,13 +51,13 @@ class DataManager:
 
         elif file_type == 'Expression':
             # Check and orient the expression matrix
-            if df.columns.astype(str).str.startswith("Sample_").any():  # samples in columns
+            if df.columns.astype(str).str.startswith("Sample").any():  # samples in columns
                 print("Detected: Genes as rows — transposing expression data")
                 df = df.transpose()
-                df.index.name = 'Sample_ID'
+                df.index.name = 'Sample'
                 df.reset_index(inplace=True)
-            elif df.index.astype(str).str.startswith("Sample_").any():
-                df.index.name = 'Sample_ID'
+            elif df.index.astype(str).str.startswith("Sample").any():
+                df.index.name = 'Sample'
                 df.reset_index(inplace=True)
             else:
                 print("Assuming samples are rows.")
@@ -77,20 +80,23 @@ class DataManager:
             print(f"[X] Failed to load file: {e}")
             return
 
-        # 1. Standardize column names (for matching)
+        # 1. Apply column name simplifications first
+        df = auto_rename_metadata_columns(df)
+        
+        # 2. Standardize remaining column names (for matching)
         df.columns = [col.strip().replace(" ", "_").lower() for col in df.columns]
 
         # 2. Validate file type
-        file_type = validate_file_type(df)
+        file_type = validate_file_type(df).lower().capitalize()
         if file_type != "Metadata":
             print("[!] Warning: This file may not contain valid metadata.")
 
-        # 3. Locate Sample_ID column smartly
-        sample_id_col = next((col for col in df.columns if 'sample' in col and 'id' in col), None)
-        if not sample_id_col:
-            print("[-] No column resembling 'Sample_ID' found.")
+        # 3. Locate Sample column smartly
+        sample_col = next((col for col in df.columns if 'sample' in col and 'id' in col), None)
+        if not sample_col:
+            print("[-] No column resembling 'Sample' found.")
             return
-        df.rename(columns={sample_id_col: 'Sample_ID'}, inplace=True)
+        df.rename(columns={sample_col: 'Sample'}, inplace=True)
 
         # 4. Handle missing data
         df = handle_missing_data(df, method=missing_method)
@@ -136,15 +142,15 @@ class DataManager:
         # 2. Standardize column names
         df.columns = [col.strip().replace(" ", "_") for col in df.columns]
 
-        # 3. Identify Sample_ID column (any variant)
-        sample_id_col = next((col for col in df.columns if 'sample' in col.lower() and 'id' in col.lower()), None)
-        if not sample_id_col:
-            print("❌ No column resembling 'Sample_ID' found in expression file.")
+        # 3. Identify Sample column (any variant)
+        sample_col = next((col for col in df.columns if 'sample' in col.lower() and 'id' in col.lower()), None)
+        if not sample_col:
+            print("ERROR: No column resembling 'Sample' found in expression file.")
             return
-        df.rename(columns={sample_id_col: 'Sample_ID'}, inplace=True)
+        df.rename(columns={sample_col: 'Sample'}, inplace=True)
 
-        # 4. Move Sample_ID to front
-        cols = ['Sample_ID'] + [c for c in df.columns if c != 'Sample_ID']
+        # 4. Move Sample to front
+        cols = ['Sample'] + [c for c in df.columns if c != 'Sample']
         df = df[cols]
 
         # 5. Handle missing data
@@ -153,13 +159,13 @@ class DataManager:
         # 6. Warn if not many numeric columns (sanity check)
         num_cols = df.select_dtypes(include='number')
         if num_cols.shape[1] < 10:
-            print("⚠️ Warning: Expression file has very few numeric columns. Are you sure this is gene expression data?")
+            print("WARNING: Warning: Expression file has very few numeric columns. Are you sure this is gene expression data?")
 
         # 7. Save cleaned file (optional)
         if save_cleaned:
             os.makedirs("cleaned_data", exist_ok=True)
             df.to_csv("cleaned_data/expression_cleaned.csv", index=False)
-            print("✅ Cleaned expression data saved to cleaned_data/expression_cleaned.csv")
+            print("SUCCESS: Cleaned expression data saved to cleaned_data/expression_cleaned.csv")
 
         # 8. Store in object
         self.expression = df
@@ -173,11 +179,36 @@ class DataManager:
 
 
     def load_metadata_df(self, df):
+        # Apply column name simplifications
+        df = auto_rename_metadata_columns(df)
+        
+        # Ensure Sample column exists
+        if 'Sample' not in df.columns:
+            # Try to find any column that looks like a sample ID
+            for col in df.columns:
+                if 'sample' in col.lower() and 'id' in col.lower():
+                    df.rename(columns={col: 'Sample'}, inplace=True)
+                    break
+                elif col.startswith('GSM'):  # Handle GSM sample IDs
+                    df.rename(columns={col: 'Sample'}, inplace=True)
+                    break
+        
         self.metadata = df
         self._try_merge()
         #load metadata directly from a pandas DataFrame
 
     def load_expression_df(self, df):
+        # Ensure Sample column exists
+        if 'Sample' not in df.columns:
+            # Try to find any column that looks like a sample ID
+            for col in df.columns:
+                if 'sample' in col.lower() and 'id' in col.lower():
+                    df.rename(columns={col: 'Sample'}, inplace=True)
+                    break
+                elif col.startswith('GSM'):  # Handle GSM sample IDs
+                    df.rename(columns={col: 'Sample'}, inplace=True)
+                    break
+        
         self.expression = df
         self._try_merge()
 
@@ -185,27 +216,56 @@ class DataManager:
 
     def _try_merge(self):
         if self.metadata is not None and self.expression is not None:
-            if 'Sample_ID' not in self.metadata.columns or 'Sample_ID' not in self.expression.columns:
-                print('Warning: No Sample_ID column found in metadata or expression data.')
+            # Check for Sample column in both dataframes
+            meta_sample_col = None
+            expr_sample_col = None
+            
+            # Look for Sample column in metadata
+            if 'Sample' in self.metadata.columns:
+                meta_sample_col = 'Sample'
+            else:
+                # Try to find any column that looks like a sample ID
+                for col in self.metadata.columns:
+                    if 'sample' in col.lower() and 'id' in col.lower():
+                        meta_sample_col = col
+                        self.metadata.rename(columns={col: 'Sample'}, inplace=True)
+                        break
+                    elif col.startswith('GSM'):  # Handle GSM sample IDs
+                        meta_sample_col = col
+                        self.metadata.rename(columns={col: 'Sample'}, inplace=True)
+                        break
+            
+            # Look for Sample column in expression
+            if 'Sample' in self.expression.columns:
+                expr_sample_col = 'Sample'
+            else:
+                # Try to find any column that looks like a sample ID
+                for col in self.expression.columns:
+                    if 'sample' in col.lower() and 'id' in col.lower():
+                        expr_sample_col = col
+                        self.expression.rename(columns={col: 'Sample'}, inplace=True)
+                        break
+                    elif col.startswith('GSM'):  # Handle GSM sample IDs
+                        expr_sample_col = col
+                        self.expression.rename(columns={col: 'Sample'}, inplace=True)
+                        break
+            
+            if not meta_sample_col or not expr_sample_col:
+                print('ERROR: Warning: No Sample column found in metadata or expression data.')
+                print(f'Metadata columns: {list(self.metadata.columns)}')
+                print(f'Expression columns: {list(self.expression.columns)}')
                 return
         
-            self.metadata['Sample_ID'] = self.metadata['Sample_ID'].astype(str).str.strip().str.upper()
-            self.expression['Sample_ID'] = self.expression['Sample_ID'].astype(str).str.strip().str.upper()
+            # Standardize Sample format
+            self.metadata['Sample'] = self.metadata['Sample'].astype(str).str.strip().str.upper()
+            self.expression['Sample'] = self.expression['Sample'].astype(str).str.strip().str.upper()
 
-            print("🔍 Metadata Sample_IDs:", self.metadata['Sample_ID'].unique())
-            print("🔍 Expression Sample_IDs:", self.expression['Sample_ID'].unique())
-
-            # Debug: Show Sample_IDs
-            print("🔍 Metadata Sample_IDs:", self.metadata['Sample_ID'].unique())
-            print("🔍 Expression Sample_IDs:", self.expression['Sample_ID'].unique())
-
-            common_ids = set(self.metadata['Sample_ID']).intersection(set(self.expression['Sample_ID']))
+            common_ids = set(self.metadata['Sample']).intersection(set(self.expression['Sample']))
             if len(common_ids) == 0:
-                print('Error: No common Sample_IDs found between metadata and expression data.')
+                print('ERROR: No common samples found between metadata and expression data.')
                 return
         
-            self.merged = pd.merge(self.metadata, self.expression, on='Sample_ID', how='inner')
-            print(f'Merged data has {len(self.merged)} samples.')
+            self.merged = pd.merge(self.metadata, self.expression, on='Sample', how='inner')
 
     def preview_metadata(self, n=5):
         if self.metadata is not None:

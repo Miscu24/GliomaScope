@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GliomaScope - Advanced Glioma Transcriptomics Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <!-- DNA Matrix Background Animation -->
+    <div class="dna-background">
+        <div class="dna-helix"></div>
+        <div class="dna-helix"></div>
+        <div class="dna-helix"></div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-dark bg-dark fixed-top top-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#home">
+                <i class="fas fa-dna me-2"></i>
+                <span class="brand-text">GliomaScope</span>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-outline-danger" onclick="window.close() || window.location.href='/'">
+                    <i class="fas fa-sign-out-alt me-2"></i>Exit
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-bars me-2"></i>Navigation</h5>
+        </div>
+        <ul class="sidebar-nav">
+            <li class="sidebar-item">
+                <a href="#home" class="sidebar-link active" data-page="home">
+                    <i class="fas fa-home me-2"></i>Home
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#geo-download" class="sidebar-link" data-page="geo-download">
+                    <i class="fas fa-download me-2"></i>1. GEO Dataset Download
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#format-dataset" class="sidebar-link" data-page="format-dataset">
+                    <i class="fas fa-file-import me-2"></i>2. Format Dataset
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#upload-metadata" class="sidebar-link" data-page="upload-metadata">
+                    <i class="fas fa-table me-2"></i>3. Upload Metadata
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#upload-expression" class="sidebar-link" data-page="upload-expression">
+                    <i class="fas fa-chart-line me-2"></i>4. Upload Expression
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#data-exploration" class="sidebar-link" data-page="data-exploration">
+                    <i class="fas fa-search me-2"></i>5. Data Exploration
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#geographic-viz" class="sidebar-link" data-page="geographic-viz">
+                    <i class="fas fa-globe-americas me-2"></i>6. Geographic Visualization
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#pca-analysis" class="sidebar-link" data-page="pca-analysis">
+                    <i class="fas fa-project-diagram me-2"></i>7. PCA Analysis
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#umap-analysis" class="sidebar-link" data-page="umap-analysis">
+                    <i class="fas fa-sitemap me-2"></i>8. UMAP Analysis
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#differential-expression" class="sidebar-link" data-page="differential-expression">
+                    <i class="fas fa-dna me-2"></i>9. Differential Expression
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#gene-exploration" class="sidebar-link" data-page="gene-exploration">
+                    <i class="fas fa-microscope me-2"></i>10. Gene Exploration
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#chromosome-mapping" class="sidebar-link" data-page="chromosome-mapping">
+                    <i class="fas fa-dna me-2"></i>11. Chromosome Mapping
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#heatmap-viz" class="sidebar-link" data-page="heatmap-viz">
+                    <i class="fas fa-th me-2"></i>12. Heatmap Visualization
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#about" class="sidebar-link" data-page="about">
+                    <i class="fas fa-info-circle me-2"></i>13. About & Help
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content" id="main-content">
+        <!-- Home Page -->
+        <div class="page active" id="home-page">
+            <div class="container-fluid">
+                <div class="row align-items-center min-vh-100">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <div class="hero-content">
+                            <h1 class="display-3 fw-bold text-white mb-4">
+                                <i class="fas fa-dna me-3"></i>GliomaScope
+                            </h1>
+                            <p class="lead text-light mb-5">
+                                Advanced Glioma Transcriptomics Analysis Platform<br>
+                                <span class="text-info">Designed for all. Built for insight.</span>
+                            </p>
+                            
+                            <div class="hero-description mb-5">
+                                <p class="text-light">
+                                    Welcome to GliomaScope, your comprehensive platform for analyzing glioma transcriptomics data. 
+                                    This tool provides advanced capabilities for data management, visualization, and gene expression analysis.
+                                </p>
+                            </div>
+
+                            <div class="hero-features">
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <div class="feature-card">
+                                            <i class="fas fa-upload fa-2x text-primary mb-3"></i>
+                                            <h5>Data Management</h5>
+                                            <p>Upload, validate, and manage your metadata and expression data</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="feature-card">
+                                            <i class="fas fa-chart-line fa-2x text-success mb-3"></i>
+                                            <h5>Advanced Analytics</h5>
+                                            <p>PCA, UMAP, and differential expression analysis</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="feature-card">
+                                            <i class="fas fa-map-marked-alt fa-2x text-warning mb-3"></i>
+                                            <h5>Geographic Mapping</h5>
+                                            <p>Visualize patient locations and study distributions</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-5">
+                                <button class="btn btn-primary btn-lg me-3" onclick="navigateToPage('geo-download')">
+                                    <i class="fas fa-rocket me-2"></i>Get Started
+                                </button>
+                                <button class="btn btn-outline-light btn-lg me-3" onclick="navigateToPage('about')">
+                                    <i class="fas fa-info-circle me-2"></i>View Help
+                                </button>
+                                <button class="btn btn-outline-warning btn-lg" onclick="window.gliomaScopeApp.resetAllData()" title="Reset all data and start fresh">
+                                    <i class="fas fa-redo me-2"></i>Reset All Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. GEO Dataset Download Page -->
+        <div class="page" id="geo-download-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-download me-3"></i>GEO Dataset Download</h2>
+                    <p class="text-light">Download and load GEO datasets by Accession ID</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-database me-2"></i>Download GEO Dataset</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="geoDownloadForm">
+                                    <div class="mb-3">
+                                        <label for="geoId" class="form-label">GEO Accession ID</label>
+                                        <input type="text" class="form-control" id="geoId" placeholder="e.g., GSE15824" required>
+                                        <div class="form-text">Enter a valid GEO dataset accession ID</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-download me-2"></i>Download & Load Dataset
+                                    </button>
+                                </form>
+                                <div id="geoDownloadResults" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-info-circle me-2"></i>Available Datasets</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="suggested-datasets">
+                                    <h6>Suggested GEO Datasets:</h6>
+                                    <div class="dataset-item" onclick="document.getElementById('geoId').value='GSE15824'">
+                                        <strong>GSE15824</strong> - Glioma samples
+                                    </div>
+                                    <div class="dataset-item" onclick="document.getElementById('geoId').value='GSE16011'">
+                                        <strong>GSE16011</strong> - Brain tumor expression
+                                    </div>
+                                    <div class="dataset-item" onclick="document.getElementById('geoId').value='GSE43378'">
+                                        <strong>GSE43378</strong> - Glioblastoma analysis
+                                    </div>
+                                    <div class="dataset-item" onclick="document.getElementById('geoId').value='GSE86574'">
+                                        <strong>GSE86574</strong> - Brain tissue comparison
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Format Dataset Page -->
+        <div class="page" id="format-dataset-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-file-import me-3"></i>Format Dataset</h2>
+                    <p class="text-light">Upload and format your custom CSV/TSV files</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-12">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-file-upload me-2"></i>Upload and Format Custom Dataset</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="formatDatasetForm" enctype="multipart/form-data">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="expressionFile" class="form-label">Expression File</label>
+                                            <input type="file" class="form-control" id="expressionFile" accept=".csv,.tsv,.txt" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="metadataFile" class="form-label">Metadata File</label>
+                                            <input type="file" class="form-control" id="metadataFile" accept=".csv,.tsv,.txt" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="exprSampleCol" class="form-label">Expression Sample ID Column</label>
+                                            <input type="text" class="form-control" id="exprSampleCol" value="Sample" placeholder="Sample">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="metaSampleCol" class="form-label">Metadata Sample ID Column</label>
+                                            <input type="text" class="form-control" id="metaSampleCol" value="SampleID" placeholder="SampleID">
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-cogs me-2"></i>Format and Load Dataset
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="formatResults" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Upload Metadata Page -->
+        <div class="page" id="upload-metadata-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-table me-3"></i>Upload Metadata</h2>
+                    <p class="text-light">Upload and manage your metadata files</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-file-upload me-2"></i>Upload Metadata File</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="uploadMetadataForm" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="metadataFileUpload" class="form-label">Select Metadata File (CSV, TSV, TXT)</label>
+                                        <input type="file" class="form-control" id="metadataFileUpload" name="file" accept=".csv,.tsv,.txt" required>
+                                        <input type="hidden" name="file_type" value="metadata">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-upload me-2"></i>Upload Metadata
+                                    </button>
+                                </form>
+                                <div id="metadataUploadResults" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-info-circle me-2"></i>Metadata Info</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="metadataSummary">
+                                    <p class="text-muted">Upload metadata to see summary</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Upload Expression Page -->
+        <div class="page" id="upload-expression-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-chart-line me-3"></i>Upload Expression Data</h2>
+                    <p class="text-light">Upload and manage your gene expression files</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-file-upload me-2"></i>Upload Expression File</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="uploadExpressionForm" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="expressionFileUpload" class="form-label">Select Expression File (CSV, TSV, TXT)</label>
+                                        <input type="file" class="form-control" id="expressionFileUpload" name="file" accept=".csv,.tsv,.txt" required>
+                                        <input type="hidden" name="file_type" value="expression">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-upload me-2"></i>Upload Expression Data
+                                    </button>
+                                </form>
+                                <div id="expressionUploadResults" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-info-circle me-2"></i>Expression Info</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="expressionSummary">
+                                    <p class="text-muted">Upload expression data to see summary</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Data Exploration Page -->
+        <div class="page" id="data-exploration-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-search me-3"></i>Data Exploration & Filtering</h2>
+                    <p class="text-light">Explore and filter your data with a clean, unified interface</p>
+                </div>
+                
+                <!-- Exploration Options Menu -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-list me-2"></i>Exploration Options</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <button class="btn btn-primary btn-lg w-100" onclick="window.gliomaScopeApp.showDataSummary()">
+                                            <i class="fas fa-chart-bar me-2"></i>1. View Data Summary
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-success btn-lg w-100" onclick="window.gliomaScopeApp.showFullDataView()">
+                                            <i class="fas fa-eye me-2"></i>2. View Data
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-warning btn-lg w-100" onclick="window.gliomaScopeApp.showDataFilter()">
+                                            <i class="fas fa-filter me-2"></i>3. Filter Data
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Data Summary Section -->
+                <div id="summarySection" class="row g-4 mb-4" style="display: none;">
+                    <div class="col-12">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-bar me-2"></i>Data Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="dataSummary">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Loading summary...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Data Preview Section -->
+                <div id="previewSection" class="row g-4 mb-4" style="display: none;">
+                    <div class="col-12">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-eye me-2"></i>Data Preview</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="dataPreview">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Loading preview...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Data Filter Section -->
+                <div id="filterSection" class="row g-4 mb-4" style="display: none;">
+                    <div class="col-12">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-filter me-2"></i>Filter Data</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Filter your data by selecting columns and values.</strong><br>
+                                    <small>Note: These datasets contain technical metadata (tissue type, sample characteristics, extraction methods, etc.). 
+                                    Clinical metadata like age, grade, and IDH mutation status may not be available in some datasets.</small>
+                                </div>
+                                
+                                <div id="availableColumns">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-warning" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Loading available columns...</p>
+                                    </div>
+                                </div>
+                                
+                                <div id="filterBuilder" class="mt-3">
+                                    <!-- Dynamic filter interface will be built here -->
+                                </div>
+                                
+                                <div id="explorationFilterResults" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Geographic Visualization Page -->
+        <div class="page" id="geographic-viz-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-globe-americas me-3"></i>Geographic Visualization</h2>
+                    <p class="text-light">Visualize study locations and sample distributions</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-map me-2"></i>Map Options</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="geoVizForm">
+                                    <div class="mb-3">
+                                        <label for="mapType" class="form-label">Map Type</label>
+                                        <select class="form-select" id="mapType">
+                                            <option value="individual">Individual Samples</option>
+                                            <option value="study">Study Origins</option>
+                                            <option value="institution">Institution Distribution</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="zoomEnabled">
+                                            <label class="form-check-label" for="zoomEnabled">
+                                                Enable Interactive Zoom
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-map-marked-alt me-2"></i>Generate Map
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-globe me-2"></i>World Map</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div id="geomapResults">
+                                    <div id="defaultMap" class="text-center py-5">
+                                        <i class="fas fa-globe fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Click "Generate Map" to view geographic data</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. PCA Analysis Page -->
+        <div class="page" id="pca-analysis-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-project-diagram me-3"></i>PCA Analysis</h2>
+                    <p class="text-light">Principal Component Analysis for dimensionality reduction</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-scatter me-2"></i>PCA Settings</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="pcaAnalysisForm">
+                                    <div class="mb-3">
+                                        <label for="pcaColorBy" class="form-label">Color By</label>
+                                        <select class="form-select" id="pcaColorBy" name="pcaColorBy">
+                                            <option value="">Select a column to color by...</option>
+                                        </select>
+                                        <div class="form-text">Metadata column to color points by</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pcaComponents" class="form-label">Components to Display</label>
+                                        <select class="form-select" id="pcaComponents">
+                                            <option value="pc1_pc2">PC1 vs PC2</option>
+                                            <option value="pc1_pc3">PC1 vs PC3</option>
+                                            <option value="pc2_pc3">PC2 vs PC3</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-info">
+                                        <i class="fas fa-chart-scatter me-2"></i>Generate PCA Plot
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-area me-2"></i>PCA Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="pcaResults">
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-chart-scatter fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Configure settings and click "Generate PCA Plot"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. UMAP Analysis Page -->
+        <div class="page" id="umap-analysis-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-sitemap me-3"></i>UMAP Analysis</h2>
+                    <p class="text-light">Uniform Manifold Approximation and Projection</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-project-diagram me-2"></i>UMAP Settings</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="umapAnalysisForm">
+                                    <div class="mb-3">
+                                        <label for="umapColorBy" class="form-label">Color By</label>
+                                        <select class="form-select" id="umapColorBy" name="umapColorBy">
+                                            <option value="">Select a column to color by...</option>
+                                        </select>
+                                        <div class="form-text">Metadata column to color points by</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="umapNeighbors" class="form-label">Number of Neighbors</label>
+                                        <select class="form-select" id="umapNeighbors">
+                                            <option value="15">15 (default)</option>
+                                            <option value="5">5 (more local)</option>
+                                            <option value="30">30 (more global)</option>
+                                            <option value="50">50 (very global)</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="umapMinDist" class="form-label">Minimum Distance</label>
+                                        <select class="form-select" id="umapMinDist">
+                                            <option value="0.1">0.1 (default)</option>
+                                            <option value="0.01">0.01 (closer points)</option>
+                                            <option value="0.5">0.5 (spread out)</option>
+                                            <option value="1.0">1.0 (very spread)</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="fas fa-project-diagram me-2"></i>Generate UMAP Plot
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-area me-2"></i>UMAP Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="umapResults">
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-sitemap fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Configure settings and click "Generate UMAP Plot"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Differential Expression Page -->
+        <div class="page" id="differential-expression-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-dna me-3"></i>Differential Expression Analysis</h2>
+                    <p class="text-light">Compare gene expression between groups</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-bar me-2"></i>Analysis Settings</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="diffExpAnalysisForm">
+                                    <div class="mb-3">
+                                        <label for="groupCol" class="form-label">Group Column</label>
+                                        <input type="text" class="form-control" id="groupCol" value="grade" placeholder="grade">
+                                        <div class="form-text">Metadata column to group samples by</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="group1" class="form-label">Group 1</label>
+                                        <input type="text" class="form-control" id="group1" value="Grade 2" placeholder="Grade 2">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="group2" class="form-label">Group 2</label>
+                                        <input type="text" class="form-control" id="group2" value="Grade 3" placeholder="Grade 3">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pValueThreshold" class="form-label">P-value Threshold</label>
+                                        <select class="form-select" id="pValueThreshold">
+                                            <option value="0.05">0.05</option>
+                                            <option value="0.01">0.01</option>
+                                            <option value="0.001">0.001</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-play me-2"></i>Run Analysis
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-table me-2"></i>Analysis Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="diffExpResults">
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-dna fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Configure groups and click "Run Analysis"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. Gene Exploration Page -->
+        <div class="page" id="gene-exploration-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-microscope me-3"></i>Individual Gene Expression</h2>
+                    <p class="text-light">Explore expression patterns of specific genes</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-gene me-2"></i>Gene Selection</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="geneExplorationForm">
+                                    <div class="mb-3">
+                                        <label for="geneNameExplore" class="form-label">Gene Name</label>
+                                        <input type="text" class="form-control" id="geneNameExplore" placeholder="e.g., EGFR, TP53, IDH1">
+                                        <div class="form-text">Enter gene symbol or probe ID</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="geneGroupBy" class="form-label">Group By</label>
+                                        <input type="text" class="form-control" id="geneGroupBy" value="grade" placeholder="grade">
+                                        <div class="form-text">Metadata column to group samples</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="plotType" class="form-label">Plot Type</label>
+                                        <select class="form-select" id="plotType">
+                                            <option value="violin">Violin Plot</option>
+                                            <option value="box">Box Plot</option>
+                                            <option value="scatter">Scatter Plot</option>
+                                            <option value="heatmap">Sample Heatmap</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-microscope me-2"></i>Explore Gene
+                                    </button>
+                                </form>
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-info btn-sm" onclick="window.gliomaScopeApp.showAvailableGenes()">
+                                        <i class="fas fa-list me-1"></i>Show Available Genes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-area me-2"></i>Expression Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="geneExpResults">
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-microscope fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Enter a gene name and click "Explore Gene"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. Chromosome Mapping Page -->
+        <div class="page" id="chromosome-mapping-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-dna me-3"></i>Chromosomal Gene Mapping</h2>
+                    <p class="text-light">Map genes to their chromosomal locations</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-map-marker-alt me-2"></i>Mapping Options</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="chromosomeMappingForm">
+                                    <div class="mb-3">
+                                        <label for="chromosomeGenes" class="form-label">Genes to Map</label>
+                                        <textarea class="form-control" id="chromosomeGenes" rows="4" placeholder="Enter gene names, one per line or comma-separated:&#10;EGFR, TP53, IDH1, PTEN"></textarea>
+                                        <div class="form-text">Enter multiple genes to see their chromosomal distribution</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="chromosomeFilter" class="form-label">Filter by Chromosome</label>
+                                        <select class="form-select" id="chromosomeFilter">
+                                            <option value="">All Chromosomes</option>
+                                            <option value="1">Chromosome 1</option>
+                                            <option value="2">Chromosome 2</option>
+                                            <option value="7">Chromosome 7</option>
+                                            <option value="10">Chromosome 10</option>
+                                            <option value="17">Chromosome 17</option>
+                                            <option value="X">Chromosome X</option>
+                                            <option value="Y">Chromosome Y</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-map-marked-alt me-2"></i>Generate Chromosome Map
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-dna me-2"></i>Chromosome Ideogram</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="chromosomeMappingResults">
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-dna fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Enter gene names and click "Generate Chromosome Map"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. Heatmap Visualization Page -->
+        <div class="page" id="heatmap-viz-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-th me-3"></i>Expression Heatmap Visualization</h2>
+                    <p class="text-light">Generate heatmaps for gene sets and samples</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-sliders-h me-2"></i>Heatmap Settings</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="heatmapVizForm">
+                                    <div class="mb-3">
+                                        <label for="heatmapGenesViz" class="form-label">Genes (comma-separated)</label>
+                                        <textarea class="form-control" id="heatmapGenesViz" rows="3" placeholder="EGFR, TP53, IDH1, PTEN, GFAP"></textarea>
+                                        <div class="form-text">Enter gene symbols separated by commas</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="heatmapGroupByViz" class="form-label">Group Samples By</label>
+                                        <input type="text" class="form-control" id="heatmapGroupByViz" placeholder="grade" value="grade">
+                                        <div class="form-text">Metadata column to group/cluster samples</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="heatmapColorScale" class="form-label">Color Scale</label>
+                                        <select class="form-select" id="heatmapColorScale">
+                                            <option value="RdYlBu">Red-Yellow-Blue</option>
+                                            <option value="Viridis">Viridis</option>
+                                            <option value="RdBu">Red-Blue</option>
+                                            <option value="Spectral">Spectral</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="clusterSamples" checked>
+                                            <label class="form-check-label" for="clusterSamples">
+                                                Cluster Samples
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="clusterGenes" checked>
+                                            <label class="form-check-label" for="clusterGenes">
+                                                Cluster Genes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-th me-2"></i>Generate Heatmap
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-area me-2"></i>Heatmap Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="heatmapResults">
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-th fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Enter gene names and click "Generate Heatmap"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. About & Help Page -->
+        <div class="page" id="about-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-info-circle me-3"></i>About GliomaScope</h2>
+                    <p class="text-light">Help, documentation, and information</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-book me-2"></i>User Guide</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="user-guide">
+                                    <h6>Getting Started</h6>
+                                    <ol>
+                                        <li><strong>Data Upload:</strong> Use options 1-4 to load your data (GEO datasets or custom files)</li>
+                                        <li><strong>Data Exploration:</strong> Option 5 to explore and filter your dataset</li>
+                                        <li><strong>Visualization:</strong> Options 6-8 for geographic and dimensionality reduction plots</li>
+                                        <li><strong>Analysis:</strong> Options 9-12 for gene expression analysis and visualization</li>
+                                    </ol>
+                                    
+                                    <h6 class="mt-4">Function Overview</h6>
+                                    <div class="function-list">
+                                        <div class="function-item">
+                                            <strong>1. GEO Dataset Download:</strong> Download and load datasets from NCBI GEO database
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>2. Format Dataset:</strong> Upload and format your own CSV/TSV files
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>3. Upload Metadata:</strong> Upload sample metadata files
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>4. Upload Expression:</strong> Upload gene expression data files
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>5. Data Exploration:</strong> Explore, filter, and preview your data
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>6. Geographic Visualization:</strong> Create maps showing study locations
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>7. PCA Analysis:</strong> Principal Component Analysis for dimensionality reduction
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>8. UMAP Analysis:</strong> UMAP for non-linear dimensionality reduction
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>9. Differential Expression:</strong> Compare gene expression between groups
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>10. Gene Exploration:</strong> Explore individual gene expression patterns
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>11. Chromosome Mapping:</strong> Map genes to chromosomal locations
+                                        </div>
+                                        <div class="function-item">
+                                            <strong>12. Heatmap Visualization:</strong> Generate expression heatmaps for gene sets
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-tools me-2"></i>Quick Actions</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-primary" onclick="navigateToPage('geo-download')">
+                                        <i class="fas fa-download me-2"></i>Download Sample Data
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="window.gliomaScopeApp.loadDataSummary()">
+                                        <i class="fas fa-refresh me-2"></i>Refresh Data Status
+                                    </button>
+                                    <button class="btn btn-outline-info" onclick="window.open('https://www.ncbi.nlm.nih.gov/geo/', '_blank')">
+                                        <i class="fas fa-external-link-alt me-2"></i>Visit GEO Database
+                                    </button>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <h6>System Information</h6>
+                                    <small class="text-muted">
+                                        <div>Version: 2.0.0</div>
+                                        <div>Platform: Web Application</div>
+                                        <div>Terminal: Available</div>
+                                        <div>Supported formats: CSV, TSV, TXT</div>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card glass-card mt-3">
+                            <div class="card-header">
+                                <h5><i class="fas fa-terminal me-2"></i>Terminal Access</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted small">
+                                    This web interface runs alongside the terminal version. 
+                                    All functions are available in both interfaces.
+                                </p>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="alert('Terminal version: python Main.py')">
+                                    <i class="fas fa-terminal me-1"></i>Terminal Command
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card">
+                <div class="modal-body text-center">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h5>Processing...</h5>
+                    <p class="text-muted">Please wait while we analyze your data</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html> 
