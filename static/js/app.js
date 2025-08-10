@@ -67,6 +67,12 @@ class GliomaScopeApp {
             diffExpAnalysisForm.addEventListener('submit', (e) => this.handleDifferentialExpression(e));
         }
         
+        // Differential Expression dropdown change handlers
+        const groupColSelect = document.getElementById('groupCol');
+        if (groupColSelect) {
+            groupColSelect.addEventListener('change', (e) => this.onDiffExpGroupColChange(e));
+        }
+        
         // Gene Exploration
         const geneExplorationForm = document.getElementById('geneExplorationForm');
         if (geneExplorationForm) {
@@ -175,6 +181,11 @@ class GliomaScopeApp {
         // Populate UMAP columns when UMAP analysis page is loaded
         if (pageName === 'umap-analysis') {
             setTimeout(() => this.populateUMAPColumns(), 500);
+        }
+        
+        // Populate dropdowns for differential expression when page is loaded
+        if (pageName === 'differential-expression') {
+            setTimeout(() => this.populateDiffExpColumns(), 500);
         }
     }
 
@@ -615,9 +626,9 @@ class GliomaScopeApp {
         
         // Show success message only if data is actually loaded
         if (summary.metadata || summary.expression) {
-            this.showAlert('Data loaded successfully! You can now proceed with analysis.', 'success');
-        }
-        
+        this.showAlert('Data loaded successfully! You can now proceed with analysis.', 'success');
+    }
+
         // Update filter options based on available columns
         if (summary.metadata && summary.metadata.columns) {
             this.updateFilterOptions(summary.metadata.columns);
@@ -1603,17 +1614,17 @@ class GliomaScopeApp {
                 const resultElement = document.getElementById(resultElementId);
                 if (resultElement) {
                     resultElement.innerHTML = `
-                        <div class="alert alert-success">
-                            <h6>Filter Results</h6>
-                            <p>Filtered ${result.filtered_count} samples</p>
-                            <a href="/download/metadata_filtered.csv" class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-download me-2"></i>Download Filtered Data
-                            </a>
-                        </div>
-                        <div class="plotly-container">
-                            ${result.preview}
-                        </div>
-                    `;
+                    <div class="alert alert-success">
+                        <h6>Filter Results</h6>
+                        <p>Filtered ${result.filtered_count} samples</p>
+                        <a href="/download/metadata_filtered.csv" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-download me-2"></i>Download Filtered Data
+                        </a>
+                    </div>
+                    <div class="plotly-container">
+                        ${result.preview}
+                    </div>
+                `;
                 }
             } else {
                 this.showAlert(result.error, 'danger');
@@ -1628,11 +1639,19 @@ class GliomaScopeApp {
     async handleDifferentialExpression(event) {
         event.preventDefault();
         
-        const formData = new FormData(event.target);
+        const groupCol = document.getElementById('groupCol').value;
+        const group1 = document.getElementById('group1').value;
+        const group2 = document.getElementById('group2').value;
+        
+        if (!groupCol || !group1 || !group2) {
+            this.showAlert('Please select all group options before running analysis.', 'warning');
+            return;
+        }
+        
         const data = {
-            group_col: formData.get('groupCol'),
-            group_1: formData.get('group1'),
-            group_2: formData.get('group2')
+            group_col: groupCol,
+            group_1: group1,
+            group_2: group2
         };
 
         this.showLoading();
@@ -1649,47 +1668,16 @@ class GliomaScopeApp {
             const result = await response.json();
             
             if (result.success) {
-                this.showAlert(`Analysis complete: ${result.significant_genes} significant genes found`, 'success');
+                this.showAlert(result.message || 'Differential expression analysis completed successfully', 'success');
                 
-                let html = `
+                // Clear the results area since plot opens in new tab
+                document.getElementById('diffExpResults').innerHTML = `
                     <div class="alert alert-success">
-                        <h6>Differential Expression Results</h6>
-                        <p>Total genes: ${result.total_genes}</p>
-                        <p>Significant genes (FDR < 0.05): ${result.significant_genes}</p>
+                        <h6>Analysis Complete</h6>
+                        <p>${result.message}</p>
+                        <p>The differential expression plot has been opened in a new browser tab.</p>
                     </div>
                 `;
-                
-                if (result.significant_results.length > 0) {
-                    html += `
-                        <div class="plotly-container">
-                            <h6>Top Significant Genes</h6>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Gene</th>
-                                            <th>Log2FC</th>
-                                            <th>P-value</th>
-                                            <th>Adj P-value</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${result.significant_results.map(gene => `
-                                            <tr>
-                                                <td>${gene.Gene}</td>
-                                                <td>${gene.log2FC.toFixed(3)}</td>
-                                                <td>${gene.p_value.toExponential(3)}</td>
-                                                <td>${gene.adj_p_value.toExponential(3)}</td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                document.getElementById('diffExpResults').innerHTML = html;
             } else {
                 this.showAlert(result.error, 'danger');
             }
@@ -1759,6 +1747,104 @@ class GliomaScopeApp {
             }
         } catch (error) {
             console.error('Error populating UMAP columns:', error);
+        }
+    }
+
+    async populateDiffExpColumns() {
+        try {
+            const response = await fetch('/available_columns');
+            const result = await response.json();
+            
+            const groupColSelect = document.getElementById('groupCol');
+            if (!groupColSelect) return;
+            
+            // Clear existing options except the first one
+            groupColSelect.innerHTML = '<option value="">Select a column to group by...</option>';
+            
+            if (result.success && result.columns.length > 0) {
+                result.columns.forEach(column => {
+                    const option = document.createElement('option');
+                    option.value = column;
+                    option.textContent = column;
+                    groupColSelect.appendChild(option);
+                });
+            } else {
+                // Add a disabled option if no columns available
+                const option = document.createElement('option');
+                option.value = "";
+                option.textContent = "No metadata columns available";
+                option.disabled = true;
+                groupColSelect.appendChild(option);
+            }
+        } catch (error) {
+            console.error('Error populating differential expression columns:', error);
+        }
+    }
+
+    async populateDiffExpGroups(columnName) {
+        try {
+            const response = await fetch('/column_values', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ column_name: columnName })
+            });
+            
+            const result = await response.json();
+            
+            const group1Select = document.getElementById('group1');
+            const group2Select = document.getElementById('group2');
+            
+            if (!group1Select || !group2Select) return;
+            
+            // Clear existing options
+            group1Select.innerHTML = '<option value="">Select group 1...</option>';
+            group2Select.innerHTML = '<option value="">Select group 2...</option>';
+            
+            if (result.success && result.values.length > 0) {
+                result.values.forEach(value => {
+                    // Add to group 1 dropdown
+                    const option1 = document.createElement('option');
+                    option1.value = value;
+                    option1.textContent = value;
+                    group1Select.appendChild(option1);
+                    
+                    // Add to group 2 dropdown
+                    const option2 = document.createElement('option');
+                    option2.value = value;
+                    option2.textContent = value;
+                    group2Select.appendChild(option2);
+                });
+            } else {
+                // Add disabled options if no values available
+                const option1 = document.createElement('option');
+                option1.value = "";
+                option1.textContent = "No values available";
+                option1.disabled = true;
+                group1Select.appendChild(option1);
+                
+                const option2 = document.createElement('option');
+                option2.value = "";
+                option2.textContent = "No values available";
+                option2.disabled = true;
+                group2Select.appendChild(option2);
+            }
+        } catch (error) {
+            console.error('Error populating differential expression groups:', error);
+        }
+    }
+
+    onDiffExpGroupColChange(event) {
+        const selectedColumn = event.target.value;
+        if (selectedColumn) {
+            this.populateDiffExpGroups(selectedColumn);
+        } else {
+            // Clear group dropdowns if no column selected
+            const group1Select = document.getElementById('group1');
+            const group2Select = document.getElementById('group2');
+            if (group1Select) group1Select.innerHTML = '<option value="">Select group column first...</option>';
+            if (group2Select) group2Select.innerHTML = '<option value="">Select group column first...</option>';
         }
     }
 

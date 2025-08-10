@@ -680,16 +680,22 @@
                                 <form id="diffExpAnalysisForm">
                                     <div class="mb-3">
                                         <label for="groupCol" class="form-label">Group Column</label>
-                                        <input type="text" class="form-control" id="groupCol" value="grade" placeholder="grade">
+                                        <select class="form-select" id="groupCol">
+                                            <option value="">Select a column to group by...</option>
+                                        </select>
                                         <div class="form-text">Metadata column to group samples by</div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="group1" class="form-label">Group 1</label>
-                                        <input type="text" class="form-control" id="group1" value="Grade 2" placeholder="Grade 2">
+                                        <select class="form-select" id="group1">
+                                            <option value="">Select group column first...</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="group2" class="form-label">Group 2</label>
-                                        <input type="text" class="form-control" id="group2" value="Grade 3" placeholder="Grade 3">
+                                        <select class="form-select" id="group2">
+                                            <option value="">Select group column first...</option>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="pValueThreshold" class="form-label">P-value Threshold</label>

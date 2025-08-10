@@ -717,7 +717,9 @@ def get_column_values():
         return jsonify({'error': 'No metadata loaded'}), 400
     
     data = request.get_json()
-    column = data.get('column')
+    
+    # Handle both old format (column) and new format (column_name) for compatibility
+    column = data.get('column') or data.get('column_name')
     
     if not column or column not in data_manager.metadata.columns:
         return jsonify({'error': f'Column {column} not found'}), 400
@@ -728,7 +730,9 @@ def get_column_values():
         values = value_counts.index.astype(str).tolist()
         counts = value_counts.values.tolist()
         
+        # Return format compatible with both old and new usage
         return jsonify({
+            'success': True,
             'values': values,
             'counts': counts,
             'total_unique': len(values)
@@ -928,7 +932,8 @@ def differential_expression_route():
     group_2 = data.get('group_2', 'Grade 3')
     
     try:
-        result_df = perform_differential_expression(
+        # Call the perform_differential_expression function which now saves to file and opens in browser
+        perform_differential_expression(
             data_manager.expression,
             data_manager.metadata,
             group_col=group_col,
@@ -936,15 +941,9 @@ def differential_expression_route():
             group_2=group_2
         )
         
-        # Get significant results
-        significant_results = result_df[result_df['adj_p_value'] < 0.05]
-        
         return jsonify({
             'success': True,
-            'total_genes': len(result_df),
-            'significant_genes': len(significant_results),
-            'top_results': result_df.head(20).to_dict('records'),
-            'significant_results': significant_results.head(20).to_dict('records')
+            'message': f'Differential expression analysis completed: {group_1} vs {group_2}'
         })
         
     except Exception as e:
@@ -1292,6 +1291,8 @@ def available_columns():
         'success': True,
         'columns': available_cols
     })
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5002) 
