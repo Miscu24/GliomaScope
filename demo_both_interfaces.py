@@ -17,7 +17,7 @@ def run_web_interface():
     print("🌐 Starting Web Interface...")
     try:
         from app import app
-        app.run(debug=False, host='0.0.0.0', port=5001, use_reloader=False)
+        app.run(debug=False, host='0.0.0.0', port=5002, use_reloader=False)
     except Exception as e:
         print(f"❌ Web interface error: {e}")
 
@@ -81,11 +81,11 @@ def main():
     # Open web browser
     print("🚀 Opening web interface in browser...")
     try:
-        webbrowser.open('http://localhost:5001')
+        webbrowser.open('http://localhost:5002')
         print("✅ Web interface should open in your browser")
     except Exception as e:
         print(f"⚠️  Could not open browser automatically: {e}")
-        print("   Please open http://localhost:5001 manually")
+        print("   Please open http://localhost:5002 manually")
     
     # Demonstrate terminal functions
     demonstrate_terminal_functions()
@@ -93,7 +93,7 @@ def main():
     print("\n" + "="*60)
     print("🎯 DUAL INTERFACE FEATURES")
     print("="*60)
-    print("1. 🌐 Web Interface (http://localhost:5001)")
+    print("1. 🌐 Web Interface (http://localhost:5002)")
     print("   • Modern GUI with biotech DNA matrix theme")
     print("   • All 13 functions with interactive forms")
     print("   • Real-time visualization with Plotly")

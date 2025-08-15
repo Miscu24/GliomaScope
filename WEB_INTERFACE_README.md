@@ -46,7 +46,7 @@ All 13 terminal functions are available with enhanced web interfaces:
 python3 run_app.py
 
 # Option 2: Direct Flask app
-python3 -c "from app import app; app.run(host='0.0.0.0', port=5001)"
+python3 -c "from app import app; app.run(host='0.0.0.0', port=5002)"
 ```
 
 ### 2. Access the Interface
@@ -222,7 +222,7 @@ pip3 install -r requirements.txt
 ### Debug Mode
 The application runs in debug mode by default for development. For production:
 ```python
-app.run(debug=False, host='0.0.0.0', port=5001)
+app.run(debug=False, host='0.0.0.0', port=5002)
 ```
 
 ## Future Enhancements

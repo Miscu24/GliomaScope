@@ -1307,8 +1307,31 @@ def available_columns():
             'columns': []
         })
     
-    # Get all columns except 'Sample' (which is used for merging)
-    available_cols = [col for col in data_manager.metadata.columns if col != 'Sample']
+    # Define whitelist of columns to keep (based on user requirements)
+    # These are the columns that are most relevant for glioma research and analysis
+    whitelisted_columns = {
+        'sample_title',           # Sometimes descriptive
+        'vital_status',           # Alive/dead - potential outcome stratification
+        'sample_type',            # Tumor vs normal
+        'channel_count',          # Could indicate assay differences
+        'tissue_type',            # Important biological grouping
+        'tissue_characteristics', # Important biological grouping
+        'organism',               # If you ever load cross-species datasets
+        'molecule',               # RNA vs DNA
+        'extraction_method',      # Potential batch effect
+        'sample_description',     # Can be informative, but free-text so less useful for colouring
+        'platform_id',            # For detecting platform-specific clusters
+        'institute',              # For geographic stratification
+        'institute_country',      # For geographic stratification
+        'gene_count',             # Technical metric - can relate to data quality
+        'related_studies'         # Could help cross-link datasets
+    }
+    
+    # Filter columns: keep only whitelisted columns and exclude 'Sample' (used for merging)
+    available_cols = [
+        col for col in data_manager.metadata.columns 
+        if col != 'Sample' and col in whitelisted_columns
+    ]
     
     return jsonify({
         'success': True,

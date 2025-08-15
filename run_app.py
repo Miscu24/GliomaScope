@@ -67,7 +67,7 @@ def main():
     
     # Start the application
     print("\n4. Starting GliomaScope...")
-    print("The application will be available at: http://localhost:5001")
+    print("The application will be available at: http://localhost:5002")
     print("For help, see README.md")
     print("Press Ctrl+C to stop the application")
     print("=" * 40)
@@ -75,7 +75,7 @@ def main():
     try:
         # Import and run the Flask app
         from app import app
-        app.run(debug=True, host='0.0.0.0', port=5001)
+        app.run(debug=True, host='0.0.0.0', port=5002)
     except KeyboardInterrupt:
         print("\nGliomaScope stopped by user")
     except Exception as e:

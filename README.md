@@ -225,7 +225,7 @@ The application uses CSS custom properties for easy theming:
 1. **Port already in use**
    ```bash
    # Change port in app.py
-   app.run(debug=True, host='0.0.0.0', port=5001)
+   app.run(debug=True, host='0.0.0.0', port=5002)
    ```
 
 2. **Missing dependencies**
