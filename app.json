@@ -1,0 +1,18 @@
+{
+  "name": "GliomaScope",
+  "description": "Advanced Glioma Transcriptomics Analysis Platform",
+  "repository": "https://github.com/yourusername/GliomaScope",
+  "logo": "https://raw.githubusercontent.com/yourusername/GliomaScope/main/static/images/logo.png",
+  "keywords": ["python", "flask", "bioinformatics", "genomics", "transcriptomics"],
+  "env": {
+    "FLASK_ENV": {
+      "description": "Flask environment",
+      "value": "production"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+} 

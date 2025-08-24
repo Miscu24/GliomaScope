@@ -1,0 +1,48 @@
+# Exclude large data files and temporary files from Heroku slug
+cleaned_data/
+uploads/
+logs/
+temp/
+tmp/
+*.tmp
+*.log
+*.csv
+*.tsv
+*.txt
+!requirements.txt
+!README.md
+!WEB_INTERFACE_README.md
+!PROJECT_SUMMARY.md
+!gene_annotation.csv
+!dummy_gene1.csv
+
+# Exclude generated analysis files
+*.html
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.pdf
+
+# Exclude development files
+.git/
+.gitignore
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Exclude test files
+tests/
+test_*
+*_test.py
+
+# Exclude documentation
+docs/
+*.md
+!README.md
+!WEB_INTERFACE_README.md
+!PROJECT_SUMMARY.md 

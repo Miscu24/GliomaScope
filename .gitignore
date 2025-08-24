@@ -96,7 +96,7 @@ instance/
 .ipynb_checkpoints
 
 # pyenv
-.python-version
+# .python-version  # Commented out to allow Heroku deployment
 
 # Environment variables
 .env
