@@ -12,4 +12,5 @@ matplotlib==3.8.2
 geopy==2.4.1
 certifi==2023.11.17
 requests==2.31.0
-gunicorn==21.2.0 
+gunicorn==21.2.0
+GEOparse==2.0.4 
