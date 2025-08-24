@@ -6,15 +6,23 @@ temp/
 tmp/
 *.tmp
 *.log
-*.csv
-*.tsv
-*.txt
-!requirements.txt
-!README.md
-!WEB_INTERFACE_README.md
-!PROJECT_SUMMARY.md
-!gene_annotation.csv
-!dummy_gene1.csv
+
+# Exclude specific data files but keep essential ones
+dummy_expression*.csv
+dummy_metadata*.csv
+output_with_coords.csv
+filtered_metadata_results.csv
+differential_expression_*.csv
+gene_expression_*.csv
+gene_chromosome_*.csv
+heatmap_*.csv
+pca_plot_*.csv
+umap_plot_*.csv
+geomap_*.csv
+world_map.csv
+institution_*.csv
+study_*.csv
+glioma_*.csv
 
 # Exclude generated analysis files
 *.html
@@ -40,9 +48,15 @@ tests/
 test_*
 *_test.py
 
-# Exclude documentation
+# Exclude documentation except essential ones
 docs/
 *.md
 !README.md
 !WEB_INTERFACE_README.md
-!PROJECT_SUMMARY.md 
+!PROJECT_SUMMARY.md
+
+# Exclude Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd 
