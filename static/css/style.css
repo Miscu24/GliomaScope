@@ -1447,4 +1447,51 @@ body.modal-open {
     color: #00d4ff !important;
     border-color: rgba(0, 212, 255, 0.3) !important;
     border-right-color: #00d4ff !important;
+}
+
+/* Progress Steps */
+.progress-steps {
+    margin-top: 1.5rem;
+}
+
+.progress-steps .step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+}
+
+.progress-steps .step.active {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--primary-color);
+    opacity: 1;
+}
+
+.progress-steps .step.completed {
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid var(--success-color);
+    opacity: 1;
+}
+
+.progress-steps .step i {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.progress-steps .step.active i {
+    color: var(--primary-color);
+}
+
+.progress-steps .step.completed i {
+    color: var(--success-color);
+}
+
+.progress-steps .step span {
+    font-size: 0.9rem;
+    font-weight: 500;
 } 

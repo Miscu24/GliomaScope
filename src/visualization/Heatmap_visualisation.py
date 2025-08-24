@@ -71,22 +71,34 @@ def plot_expression_heatmap(expression_df, metadata_df=None, genes=None, group_c
     if metadata_df is not None and group_col and group_col in metadata_df.columns:
         group_series = metadata_df.set_index('Sample')[group_col].reindex(scaled_df.index)
 
+    # Create sample numbers for Y-axis (instead of sample IDs)
+    sample_numbers = [f"Sample {i+1}" for i in range(len(scaled_df))]
+    
+    # Create custom hover text that includes both sample number and sample ID
+    hover_text = []
+    for i, sample_id in enumerate(scaled_df.index):
+        row = []
+        for gene in scaled_df.columns:
+            row.append(f"Sample {i+1} ({sample_id})<br>Gene: {gene}<br>Expression: {scaled_df.loc[sample_id, gene]:.2f}")
+        hover_text.append(row)
+    
     # Create interactive heatmap with Plotly
     fig = go.Figure(data=go.Heatmap(
         z=scaled_df.values,
         x=scaled_df.columns,
-        y=scaled_df.index,
+        y=sample_numbers,  # Use sample numbers instead of sample IDs
         colorscale='RdBu_r',  # Red-Blue diverging colormap
         zmid=0,  # Centre the colormap at 0
         hoverongaps=False,
-        hovertemplate='<b>Sample:</b> %{y}<br><b>Gene:</b> %{x}<br><b>Expression:</b> %{z:.2f}<extra></extra>'
+        text=hover_text,
+        hovertemplate='%{text}<extra></extra>'
     ))
 
     # Update layout
     fig.update_layout(
-        title=f"Gene Expression Heatmap ({len(genes)} genes, {len(scaled_df)} samples)",
+        title=f"Gene Expression Heatmap ({len(genes)} genes, {len(scaled_df)} samples) - All samples shown",
         xaxis_title="Genes",
-        yaxis_title="Samples",
+        yaxis_title=f"Samples (1-{len(scaled_df)})",
         width=1200,
         height=800,
         xaxis=dict(
@@ -94,6 +106,11 @@ def plot_expression_heatmap(expression_df, metadata_df=None, genes=None, group_c
             tickmode='array',
             ticktext=scaled_df.columns,
             tickvals=list(range(len(scaled_df.columns)))
+        ),
+        yaxis=dict(
+            tickmode='array',
+            ticktext=[f"Sample {i+1}" for i in range(0, len(scaled_df), max(1, len(scaled_df)//20))],  # Show ~20 labels
+            tickvals=[i for i in range(0, len(scaled_df), max(1, len(scaled_df)//20))]
         )
     )
 

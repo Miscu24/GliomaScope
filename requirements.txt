@@ -10,4 +10,5 @@ statsmodels==0.14.0
 seaborn==0.12.2
 matplotlib==3.7.2
 geopy==2.3.0
-certifi==2023.7.22 
+certifi==2023.7.22
+requests==2.31.0 

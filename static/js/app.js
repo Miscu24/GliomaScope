@@ -19,22 +19,10 @@ class GliomaScopeApp {
             geoDownloadForm.addEventListener('submit', (e) => this.handleGeoDownload(e));
         }
         
-        // Format Dataset
-        const formatDatasetForm = document.getElementById('formatDatasetForm');
-        if (formatDatasetForm) {
-            formatDatasetForm.addEventListener('submit', (e) => this.handleFormatDataset(e));
-        }
-        
-        // Upload Metadata
-        const uploadMetadataForm = document.getElementById('uploadMetadataForm');
-        if (uploadMetadataForm) {
-            uploadMetadataForm.addEventListener('submit', (e) => this.handleFileUpload(e, 'metadataUploadResults'));
-        }
-        
-        // Upload Expression
-        const uploadExpressionForm = document.getElementById('uploadExpressionForm');
-        if (uploadExpressionForm) {
-            uploadExpressionForm.addEventListener('submit', (e) => this.handleFileUpload(e, 'expressionUploadResults'));
+        // Upload Custom Data
+        const uploadCustomDataForm = document.getElementById('uploadCustomDataForm');
+        if (uploadCustomDataForm) {
+            uploadCustomDataForm.addEventListener('submit', (e) => this.handleUploadCustomData(e));
         }
         
         // Data Exploration Filter
@@ -306,6 +294,61 @@ class GliomaScopeApp {
         }
     }
 
+    showDetailedLoading(title, steps) {
+        try {
+            const modalElement = document.getElementById('loadingModal');
+            if (modalElement) {
+                // Update modal content with detailed steps
+                const modalTitle = modalElement.querySelector('.modal-title');
+                const modalBody = modalElement.querySelector('.modal-body');
+                
+                if (modalTitle) modalTitle.textContent = title;
+                if (modalBody) {
+                    modalBody.innerHTML = `
+                        <div class="text-center">
+                            <div class="spinner-border text-primary mb-3" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mb-3">Please wait while we process your request...</p>
+                            <div class="progress-steps">
+                                ${steps.map((step, index) => `
+                                    <div class="step ${index === 0 ? 'active' : ''}" id="step-${index}">
+                                        <i class="fas fa-circle-notch fa-spin"></i>
+                                        <span>${step}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+                
+                // Simulate progress through steps
+                steps.forEach((step, index) => {
+                    setTimeout(() => {
+                        const stepElement = document.getElementById(`step-${index}`);
+                        if (stepElement) {
+                            stepElement.classList.remove('active');
+                            stepElement.classList.add('completed');
+                            stepElement.querySelector('i').className = 'fas fa-check text-success';
+                        }
+                    }, (index + 1) * 1000); // Progress every second
+                });
+                
+                // Auto-hide after all steps complete
+                setTimeout(() => {
+                    this.hideLoading();
+                }, (steps.length + 1) * 1000);
+            }
+        } catch (error) {
+            console.error('Error showing detailed loading modal:', error);
+            // Fallback to simple loading
+            this.showLoading();
+        }
+    }
+
     showAlert(message, type = 'success') {
         const alertDiv = document.createElement('div');
         alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
@@ -336,7 +379,17 @@ class GliomaScopeApp {
             return;
         }
 
-        this.showLoading();
+        // Clear previous results first
+        document.getElementById('geoDownloadResults').innerHTML = '';
+        
+        // Show detailed loading with progress updates
+        this.showDetailedLoading('Downloading GEO dataset...', [
+            'Connecting to GEO database...',
+            'Downloading metadata...',
+            'Downloading expression data...',
+            'Processing and formatting data...',
+            'Loading into memory...'
+        ]);
         
         try {
             const response = await fetch('/geo_download', {
@@ -354,12 +407,19 @@ class GliomaScopeApp {
                 document.getElementById('geoDownloadResults').innerHTML = `
                     <div class="alert alert-success">
                         <h6>Download Complete</h6>
-                        <p>Dataset: ${geoId}</p>
-                        <p>Samples: ${result.samples}</p>
-                        <p>Genes: ${result.genes}</p>
+                        <p><strong>Dataset:</strong> ${geoId}</p>
+                        <p><strong>Samples:</strong> ${result.samples}</p>
+                        <p><strong>Genes:</strong> ${result.genes}</p>
+                        <p><strong>Status:</strong> Ready for analysis</p>
                     </div>
                 `;
                 this.updateDataSummary(result.summary);
+                
+                // Auto-navigate to data exploration after successful download
+                setTimeout(() => {
+                    this.navigateToPage('data-exploration');
+                }, 2000);
+                
             } else {
                 this.showAlert(result.error || 'Download failed', 'danger');
             }
@@ -371,43 +431,81 @@ class GliomaScopeApp {
         }
     }
 
-    async handleFormatDataset(event) {
+    async handleUploadCustomData(event) {
         event.preventDefault();
         
         const formData = new FormData(event.target);
         
-        if (!formData.get('expressionFile') || !formData.get('metadataFile')) {
-            this.showAlert('Please select both expression and metadata files.', 'danger');
+        // Check if at least one file is provided
+        const expressionFile = formData.get('expression_file');
+        const metadataFile = formData.get('metadata_file');
+        
+        if (!expressionFile && !metadataFile) {
+            this.showAlert('Please select at least one file (expression or metadata).', 'danger');
             return;
         }
 
         this.showLoading();
         
         try {
-            const response = await fetch('/format_dataset', {
-                method: 'POST',
-                body: formData
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                this.showAlert('Dataset formatted and loaded successfully!', 'success');
-                document.getElementById('formatResults').innerHTML = `
-                    <div class="alert alert-success">
-                        <h6>Format Complete</h6>
-                        <p>Expression samples: ${result.expression_samples}</p>
-                        <p>Metadata samples: ${result.metadata_samples}</p>
-                        <p>Matched samples: ${result.matched_samples}</p>
-                    </div>
-                `;
-                this.updateDataSummary(result.summary);
+            // If both files are provided, use format_dataset endpoint
+            if (expressionFile && metadataFile) {
+                const formatFormData = new FormData();
+                formatFormData.append('expressionFile', expressionFile);
+                formatFormData.append('metadataFile', metadataFile);
+                formatFormData.append('exprSampleCol', formData.get('customExprSampleCol') || 'Sample');
+                formatFormData.append('metaSampleCol', formData.get('customMetaSampleCol') || 'SampleID');
+                
+                const response = await fetch('/format_dataset', {
+                    method: 'POST',
+                    body: formatFormData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    this.showAlert('Dataset formatted and loaded successfully!', 'success');
+                    document.getElementById('uploadCustomDataResults').innerHTML = `
+                        <div class="alert alert-success">
+                            <h6>Upload Complete</h6>
+                            <p>Expression samples: ${result.expression_samples}</p>
+                            <p>Metadata samples: ${result.metadata_samples}</p>
+                            <p>Matched samples: ${result.matched_samples}</p>
+                        </div>
+                    `;
+                    this.updateDataSummary(result.summary);
+                } else {
+                    this.showAlert(result.error || 'Upload failed', 'danger');
+                }
             } else {
-                this.showAlert(result.error || 'Format failed', 'danger');
+                // Handle single file upload
+                const singleFileFormData = new FormData();
+                singleFileFormData.append('file', expressionFile || metadataFile);
+                singleFileFormData.append('file_type', expressionFile ? 'expression' : 'metadata');
+                
+                const response = await fetch('/upload_file', {
+                    method: 'POST',
+                    body: singleFileFormData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    this.showAlert('File uploaded successfully!', 'success');
+                    document.getElementById('uploadCustomDataResults').innerHTML = `
+                        <div class="alert alert-success">
+                            <h6>Upload Complete</h6>
+                            <p>${result.message}</p>
+                        </div>
+                    `;
+                    this.updateDataSummary(result.summary);
+                } else {
+                    this.showAlert(result.error || 'Upload failed', 'danger');
+                }
             }
         } catch (error) {
-            console.error('Format error:', error);
-            this.showAlert('Error formatting dataset: ' + error.message, 'danger');
+            console.error('Upload error:', error);
+            this.showAlert('Error uploading data: ' + error.message, 'danger');
         } finally {
             this.hideLoading();
         }
@@ -1203,14 +1301,14 @@ class GliomaScopeApp {
         // Show filter section
         document.getElementById('filterSection').style.display = 'block';
         
-        // Load available columns
+        // Load available columns (using whitelisted columns like UMAP)
         try {
-            const response = await fetch('/data_summary');
-            const summary = await response.json();
+            const response = await fetch('/available_columns');
+            const result = await response.json();
             
             const columnsDiv = document.getElementById('availableColumns');
             
-            if (!summary.metadata) {
+            if (!result.success || !result.columns || result.columns.length === 0) {
                 columnsDiv.innerHTML = `
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle me-2"></i>
@@ -1220,7 +1318,7 @@ class GliomaScopeApp {
                 return;
             }
             
-            const columns = summary.metadata.columns;
+            const columns = result.columns;
             
             let html = `
                 <div class="row">
@@ -1234,27 +1332,10 @@ class GliomaScopeApp {
                                 <option value="">🔍 Choose a column to filter by...</option>
             `;
             
-            // Add columns to dropdown with helpful icons
+            // Add columns to dropdown
             for (let i = 0; i < columns.length; i++) {
                 const col = columns[i];
-                let icon = '📊'; // default icon
-                
-                // Add contextual icons based on column name
-                if (col.toLowerCase().includes('tissue') || col.toLowerCase().includes('sample')) {
-                    icon = '🧬';
-                } else if (col.toLowerCase().includes('date') || col.toLowerCase().includes('time')) {
-                    icon = '📅';
-                } else if (col.toLowerCase().includes('geo') || col.toLowerCase().includes('id')) {
-                    icon = '🆔';
-                } else if (col.toLowerCase().includes('status') || col.toLowerCase().includes('type')) {
-                    icon = '🏷️';
-                } else if (col.toLowerCase().includes('count') || col.toLowerCase().includes('channel')) {
-                    icon = '🔢';
-                } else if (col.toLowerCase().includes('institute') || col.toLowerCase().includes('submitter')) {
-                    icon = '🏥';
-                }
-                
-                html += `<option value="${col}">${icon} ${col}</option>`;
+                html += `<option value="${col}">${col}</option>`;
             }
             
             html += `
@@ -1268,8 +1349,8 @@ class GliomaScopeApp {
                         <h6><i class="fas fa-info-circle me-2"></i>Filter Info:</h6>
                         <div class="card card-body p-2">
                             <small class="text-muted">
-                                <strong>Total Columns:</strong> ${columns.length}<br>
-                                <strong>Available for filtering:</strong> All metadata columns
+                                <strong>Relevant Columns:</strong> ${columns.length}<br>
+                                <strong>Filtered for:</strong> Most useful metadata columns
                             </small>
                         </div>
                     </div>
@@ -1505,7 +1586,7 @@ class GliomaScopeApp {
     async resetAllData() {
         // Show confirmation dialog
         const confirmed = confirm(
-            '🔄 Reset All Data?\n\n' +
+            'Reset All Data?\n\n' +
             'This will completely clear:\n' +
             '• All loaded datasets\n' +
             '• All cached results\n' +
@@ -1519,7 +1600,7 @@ class GliomaScopeApp {
         
         try {
             // Show loading state
-            this.showAlert('🔄 Resetting all data...', 'info');
+            this.showAlert('Resetting all data...', 'info');
             
             const response = await fetch('/reset_data', {
                 method: 'POST',
@@ -1532,64 +1613,62 @@ class GliomaScopeApp {
             
             if (result.success) {
                 // Clear all UI elements and show "no data" messages
-                document.getElementById('dataSummary').innerHTML = `
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <strong>No Data Available</strong><br>
-                        Please upload or download datasets to see data summary.
-                    </div>
-                `;
-                
-                document.getElementById('dataPreview').innerHTML = `
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <strong>No Data Available</strong><br>
-                        Please upload or download datasets to view data.
-                    </div>
-                `;
-                
-                document.getElementById('availableColumns').innerHTML = `
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <strong>No Data Available</strong><br>
-                        Please upload or download datasets to filter data.
-                    </div>
-                `;
-                
-                document.getElementById('filterBuilder').innerHTML = '';
-                document.getElementById('explorationFilterResults').innerHTML = '';
-                
-                // Clear upload results
-                document.getElementById('geoDownloadResults').innerHTML = '';
-                document.getElementById('formatResults').innerHTML = '';
-                document.getElementById('metadataUploadResults').innerHTML = '';
-                document.getElementById('expressionUploadResults').innerHTML = '';
-                
-                // Clear summaries
-                document.getElementById('metadataSummary').innerHTML = `
-                    <p class="text-muted">Upload metadata to see summary</p>
-                `;
-                document.getElementById('expressionSummary').innerHTML = `
-                    <p class="text-muted">Upload expression data to see summary</p>
-                `;
-                
-                // Reset status indicators
-                this.updateDataStatus();
+                this.clearAllUIElements();
                 
                 // Show success message
-                this.showAlert('✅ ' + result.message, 'success');
+                this.showAlert('All data has been completely reset. You can now start fresh with new datasets.', 'success');
                 
-                // Navigate back to homepage
-                this.navigateToPage('home');
+                // Force complete page refresh to ensure clean state
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 1500);
                 
             } else {
-                this.showAlert('❌ Error: ' + result.error, 'danger');
+                this.showAlert('Error: ' + result.error, 'danger');
             }
             
         } catch (error) {
             console.error('Error resetting data:', error);
-            this.showAlert('❌ Error resetting data: ' + error.message, 'danger');
+            this.showAlert('Error resetting data: ' + error.message, 'danger');
         }
+    }
+
+    // Clear all UI elements after reset
+    clearAllUIElements() {
+        // Clear all result containers
+        const containers = [
+            'dataSummary', 'dataPreview', 'availableColumns', 'filterBuilder', 
+            'explorationFilterResults', 'geoDownloadResults', 'formatResults',
+            'metadataUploadResults', 'expressionUploadResults', 'metadataSummary',
+            'expressionSummary', 'geoVizResults', 'pcaResults', 'umapResults',
+            'diffExpResults', 'geneExplorationResults', 'chromosomeMappingResults',
+            'heatmapResults'
+        ];
+        
+        containers.forEach(containerId => {
+            const element = document.getElementById(containerId);
+            if (element) {
+                element.innerHTML = '';
+            }
+        });
+        
+        // Clear all form inputs
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type === 'file') {
+                    input.value = '';
+                } else if (input.type === 'text' || input.type === 'number') {
+                    input.value = '';
+                } else if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                }
+            });
+        });
+        
+        // Reset status indicators
+        this.updateDataStatus();
     }
 
     async handleDataFiltering(event, resultElementId = 'filterResults') {

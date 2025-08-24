@@ -47,14 +47,14 @@ O       o O       o O       o O       o O       o         O
 | | O | | | | O | | | | O | | | | O | | | | O | | | | O | |
 | o   O | | o   O | | o   O | | o   O | | o   O | | o   O |
 o       O o       O o       O o       O o       O o       O
-   ___ _ _                       __
-  / _ \ (_) ___  _ __ ___   __ _/ _\ ___ ___  _ __   ___
+   ___ _ _                       __                      
+  / _ \ (_) ___  _ __ ___   __ _/ _\ ___ ___  _ __   ___ 
  / /_\/ | |/ _ \| '_ ` _ \ / _` \ \ / __/ _ \| '_ \ / _ \
 / /_\\| | | (_) | | | | | | (_| |\ \ (_| (_) | |_) |  __/
 \____/|_|_|\___/|_| |_| |_|\__,_\__/\___\___/| .__/ \___|
-                                             |_|
-
-          Designed for all. Built for insight.
+                                             |_|         
+  
+          Designed for all. Built for insight. 
         Dive deep into glioma transcriptomics.
              Fast. Intuitive. Insightful.
 """)
@@ -76,11 +76,11 @@ def print_introduction():
 
 def print_menu():
     """Print the main menu options."""
-    print("\n=== GliomaScope CLI ===")
-    print("1. Download + load GEO dataset by ID")
-    print("2. Format dataset (upload .csv/.tsv) and select to load")
-    print("3. Upload metadata file")
-    print("4. Upload expression file")
+        print("\n=== GliomaScope CLI ===")
+        print("1. Download + load GEO dataset by ID")
+        print("2. Format dataset (upload .csv/.tsv) and select to load")
+        print("3. Upload metadata file")
+        print("4. Upload expression file")
     print("5. Data Exploration & Filtering")
     print("6. Geographic Visualisation")
     print("7. Visualise PCA")
@@ -96,15 +96,15 @@ def handle_geo_download():
     """Handle GEO dataset download."""
     from src.utils.Utils import fetch_and_format_geo, display_and_log_summary
 
-    geo_id = input("Enter GEO Accession ID (e.g. GSE15824): ").strip()
+            geo_id = input("Enter GEO Accession ID (e.g. GSE15824): ").strip()
     print("Loading dataset...")
 
-    # Fetch DataFrames
-    meta_df, expr_df = fetch_and_format_geo(geo_id)
+            # Fetch DataFrames
+            meta_df, expr_df = fetch_and_format_geo(geo_id)
 
-    if meta_df is None or expr_df is None:
+            if meta_df is None or expr_df is None:
         print("Failed to load GEO dataset.")
-        return
+                return
 
     # Load into data manager
     data_manager.metadata = meta_df
@@ -180,7 +180,7 @@ def handle_geographic_visualization():
 
 def handle_pca_visualization():
     """Handle PCA visualization."""
-    if data_manager.expression is None:
+            if data_manager.expression is None:
         print("No expression data loaded. Please upload expression data first.")
         return
 
@@ -216,7 +216,7 @@ def handle_umap_visualization():
     try:
         plot_umap(data_manager.expression, data_manager.metadata, color_by)
         print("UMAP plot generated successfully!")
-    except Exception as e:
+                except Exception as e:
         print(f"Error generating UMAP plot: {e}")
 
 
@@ -231,7 +231,7 @@ def handle_differential_expression():
     print("\n=== Differential Expression Analysis ===")
 
     # Get available columns
-    available_cols = [col for col in data_manager.metadata.columns if col != 'Sample']
+                available_cols = [col for col in data_manager.metadata.columns if col != 'Sample']
     print(f"Available grouping columns: {', '.join(available_cols)}")
 
     group_col = input("Enter grouping column name: ").strip()
@@ -257,7 +257,7 @@ def handle_differential_expression():
             group_col, group1, group2
         )
         print("Differential expression analysis completed!")
-    except Exception as e:
+                except Exception as e:
         print(f"Error in differential expression analysis: {e}")
 
 
@@ -348,25 +348,25 @@ def handle_gene_expression():
             else:
                 print(f"Invalid number. Please enter 1-{len(probe_list)}.")
                 return
-        else:
+            else:
             # User entered gene name or probe ID
             gene_name = user_input
             gene_upper = user_input.upper()
 
             if user_input in data_manager.expression.columns:
-                # Already a probe ID
+                        # Already a probe ID
                 probe_id = user_input
                 print(f"SUCCESS: Using probe ID: '{user_input}'")
-            elif gene_upper in all_genes_mapping:
-                # Found gene name in mapping
-                probe_id = all_genes_mapping[gene_upper]
+                    elif gene_upper in all_genes_mapping:
+                        # Found gene name in mapping
+                        probe_id = all_genes_mapping[gene_upper]
                 print(f"SUCCESS: Mapped '{user_input}' to probe ID '{probe_id}'")
-            else:
+                    else:
                 print(f"ERROR: Gene '{user_input}' not found.")
                 return
 
         # Get grouping column
-        available_cols = [col for col in data_manager.metadata.columns if col != 'Sample']
+                    available_cols = [col for col in data_manager.metadata.columns if col != 'Sample']
         print(f"\nAvailable grouping columns: {', '.join(available_cols)}")
         group_col = input("Enter grouping column name: ").strip()
 
@@ -380,10 +380,10 @@ def handle_gene_expression():
             probe_id, group_col
         )
         print("Gene expression plot generated successfully!")
-
-    except Exception as e:
-        print(f"ERROR: Error occurred while exploring gene expression: {e}")
-        print("TIP: Make sure your data is properly loaded and formatted")
+                    
+                except Exception as e:
+                    print(f"ERROR: Error occurred while exploring gene expression: {e}")
+                    print("TIP: Make sure your data is properly loaded and formatted")
 
 
 def handle_chromosome_mapping():
@@ -401,9 +401,9 @@ def handle_chromosome_mapping():
     print("chromosome ideograms with gene positions.")
 
     # Get available genes
-    annotations = load_gene_annotations()
-    all_genes_mapping = get_all_available_genes(data_manager.expression, annotations)
-
+                    annotations = load_gene_annotations()
+                    all_genes_mapping = get_all_available_genes(data_manager.expression, annotations)
+                    
     # Create a unique list of GENE NAMES only
     unique_genes = {}  # gene_name -> probe_id
     display_names = []  # For numbered display (gene names only)
@@ -481,14 +481,14 @@ def handle_chromosome_mapping():
             gene_upper = user_input.upper()
 
             if user_input in data_manager.expression.columns:
-                # Already a probe ID
+                        # Already a probe ID
                 probe_id = user_input
                 print(f"SUCCESS: Using probe ID: '{user_input}'")
-            elif gene_upper in all_genes_mapping:
-                # Found gene name in mapping
-                probe_id = all_genes_mapping[gene_upper]
+                    elif gene_upper in all_genes_mapping:
+                        # Found gene name in mapping
+                        probe_id = all_genes_mapping[gene_upper]
                 print(f"SUCCESS: Mapped '{user_input}' to probe ID '{probe_id}'")
-            else:
+                    else:
                 print(f"ERROR: Gene '{user_input}' not found.")
                 return
 
@@ -505,8 +505,8 @@ def handle_heatmap_visualization():
     """Handle heatmap visualization."""
     if data_manager.expression is None or data_manager.metadata is None:
         print("Both expression and metadata required. Please upload both first.")
-        return
-
+                        return
+                    
     from src.visualization.Heatmap_visualisation import plot_expression_heatmap
     from src.utils.Utils import get_all_available_genes, load_gene_annotations
 
@@ -614,13 +614,13 @@ def handle_heatmap_visualization():
 
     try:
         # Generate the heatmap
-        plot_expression_heatmap(
+                    plot_expression_heatmap(
             data_manager.expression, data_manager.metadata,
             gene_list, group_col
         )
         print("Heatmap generated successfully!")
 
-    except Exception as e:
+                except Exception as e:
         print(f"ERROR: Error occurred while generating heatmap: {e}")
         print("TIP: Make sure your data is properly loaded and formatted")
 
@@ -670,4 +670,4 @@ def main_menu():
 
 
 if __name__ == "__main__":
-    main_menu()
+        main_menu()

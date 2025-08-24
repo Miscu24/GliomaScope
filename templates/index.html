@@ -49,63 +49,53 @@
                 </a>
             </li>
             <li class="sidebar-item">
-                <a href="#format-dataset" class="sidebar-link" data-page="format-dataset">
-                    <i class="fas fa-file-import me-2"></i>2. Format Dataset
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#upload-metadata" class="sidebar-link" data-page="upload-metadata">
-                    <i class="fas fa-table me-2"></i>3. Upload Metadata
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="#upload-expression" class="sidebar-link" data-page="upload-expression">
-                    <i class="fas fa-chart-line me-2"></i>4. Upload Expression
+                <a href="#upload-custom-data" class="sidebar-link" data-page="upload-custom-data">
+                    <i class="fas fa-file-import me-2"></i>2. Upload Custom Data
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#data-exploration" class="sidebar-link" data-page="data-exploration">
-                    <i class="fas fa-search me-2"></i>5. Data Exploration
+                    <i class="fas fa-search me-2"></i>3. Data Exploration
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#geographic-viz" class="sidebar-link" data-page="geographic-viz">
-                    <i class="fas fa-globe-americas me-2"></i>6. Geographic Visualization
+                    <i class="fas fa-globe-americas me-2"></i>4. Geographic Visualization
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#pca-analysis" class="sidebar-link" data-page="pca-analysis">
-                    <i class="fas fa-project-diagram me-2"></i>7. PCA Analysis
+                    <i class="fas fa-project-diagram me-2"></i>5. PCA Analysis
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#umap-analysis" class="sidebar-link" data-page="umap-analysis">
-                    <i class="fas fa-sitemap me-2"></i>8. UMAP Analysis
+                    <i class="fas fa-sitemap me-2"></i>6. UMAP Analysis
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#differential-expression" class="sidebar-link" data-page="differential-expression">
-                    <i class="fas fa-dna me-2"></i>9. Differential Expression
+                    <i class="fas fa-dna me-2"></i>7. Differential Expression
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#gene-exploration" class="sidebar-link" data-page="gene-exploration">
-                    <i class="fas fa-microscope me-2"></i>10. Gene Exploration
+                    <i class="fas fa-microscope me-2"></i>8. Gene Exploration
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#chromosome-mapping" class="sidebar-link" data-page="chromosome-mapping">
-                    <i class="fas fa-dna me-2"></i>11. Chromosome Mapping
+                    <i class="fas fa-dna me-2"></i>9. Chromosome Mapping
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#heatmap-viz" class="sidebar-link" data-page="heatmap-viz">
-                    <i class="fas fa-th me-2"></i>12. Heatmap Visualization
+                    <i class="fas fa-th me-2"></i>10. Heatmap Visualization
                 </a>
             </li>
             <li class="sidebar-item">
                 <a href="#about" class="sidebar-link" data-page="about">
-                    <i class="fas fa-info-circle me-2"></i>13. About & Help
+                    <i class="fas fa-info-circle me-2"></i>11. About & Help
                 </a>
             </li>
         </ul>
@@ -233,142 +223,13 @@
             </div>
         </div>
 
-        <!-- 2. Format Dataset Page -->
-        <div class="page" id="format-dataset-page">
-            <div class="container-fluid">
-                <div class="page-header">
-                    <h2><i class="fas fa-file-import me-3"></i>Format Dataset</h2>
-                    <p class="text-light">Upload and format your custom CSV/TSV files</p>
-                </div>
-                <div class="row g-4">
-                    <div class="col-lg-12">
-                        <div class="card glass-card">
-                            <div class="card-header">
-                                <h5><i class="fas fa-file-upload me-2"></i>Upload and Format Custom Dataset</h5>
-                            </div>
-                            <div class="card-body">
-                                <form id="formatDatasetForm" enctype="multipart/form-data">
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="expressionFile" class="form-label">Expression File</label>
-                                            <input type="file" class="form-control" id="expressionFile" accept=".csv,.tsv,.txt" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="metadataFile" class="form-label">Metadata File</label>
-                                            <input type="file" class="form-control" id="metadataFile" accept=".csv,.tsv,.txt" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="exprSampleCol" class="form-label">Expression Sample ID Column</label>
-                                            <input type="text" class="form-control" id="exprSampleCol" value="Sample" placeholder="Sample">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="metaSampleCol" class="form-label">Metadata Sample ID Column</label>
-                                            <input type="text" class="form-control" id="metaSampleCol" value="SampleID" placeholder="SampleID">
-                                        </div>
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-success">
-                                                <i class="fas fa-cogs me-2"></i>Format and Load Dataset
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                                <div id="formatResults" class="mt-3"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- 3. Upload Metadata Page -->
-        <div class="page" id="upload-metadata-page">
-            <div class="container-fluid">
-                <div class="page-header">
-                    <h2><i class="fas fa-table me-3"></i>Upload Metadata</h2>
-                    <p class="text-light">Upload and manage your metadata files</p>
-                </div>
-                <div class="row g-4">
-                    <div class="col-lg-8">
-                        <div class="card glass-card">
-                            <div class="card-header">
-                                <h5><i class="fas fa-file-upload me-2"></i>Upload Metadata File</h5>
-                            </div>
-                            <div class="card-body">
-                                <form id="uploadMetadataForm" enctype="multipart/form-data">
-                                    <div class="mb-3">
-                                        <label for="metadataFileUpload" class="form-label">Select Metadata File (CSV, TSV, TXT)</label>
-                                        <input type="file" class="form-control" id="metadataFileUpload" name="file" accept=".csv,.tsv,.txt" required>
-                                        <input type="hidden" name="file_type" value="metadata">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-upload me-2"></i>Upload Metadata
-                                    </button>
-                                </form>
-                                <div id="metadataUploadResults" class="mt-3"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="card glass-card">
-                            <div class="card-header">
-                                <h5><i class="fas fa-info-circle me-2"></i>Metadata Info</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="metadataSummary">
-                                    <p class="text-muted">Upload metadata to see summary</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- 4. Upload Expression Page -->
-        <div class="page" id="upload-expression-page">
-            <div class="container-fluid">
-                <div class="page-header">
-                    <h2><i class="fas fa-chart-line me-3"></i>Upload Expression Data</h2>
-                    <p class="text-light">Upload and manage your gene expression files</p>
-                </div>
-                <div class="row g-4">
-                    <div class="col-lg-8">
-                        <div class="card glass-card">
-                            <div class="card-header">
-                                <h5><i class="fas fa-file-upload me-2"></i>Upload Expression File</h5>
-                            </div>
-                            <div class="card-body">
-                                <form id="uploadExpressionForm" enctype="multipart/form-data">
-                                    <div class="mb-3">
-                                        <label for="expressionFileUpload" class="form-label">Select Expression File (CSV, TSV, TXT)</label>
-                                        <input type="file" class="form-control" id="expressionFileUpload" name="file" accept=".csv,.tsv,.txt" required>
-                                        <input type="hidden" name="file_type" value="expression">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-upload me-2"></i>Upload Expression Data
-                                    </button>
-                                </form>
-                                <div id="expressionUploadResults" class="mt-3"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="card glass-card">
-                            <div class="card-header">
-                                <h5><i class="fas fa-info-circle me-2"></i>Expression Info</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="expressionSummary">
-                                    <p class="text-muted">Upload expression data to see summary</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- 5. Data Exploration Page -->
+
+
+
+        <!-- 3. Data Exploration Page -->
         <div class="page" id="data-exploration-page">
             <div class="container-fluid">
                 <div class="page-header">
@@ -770,11 +631,7 @@
                                         <i class="fas fa-microscope me-2"></i>Explore Gene
                                     </button>
                                 </form>
-                                <div class="mt-3">
-                                    <button class="btn btn-outline-info btn-sm" onclick="window.gliomaScopeApp.showAvailableGenes()">
-                                        <i class="fas fa-list me-1"></i>Show Available Genes
-                                    </button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -874,29 +731,7 @@
                                         </select>
                                         <div class="form-text">Metadata column to group/cluster samples</div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="heatmapColorScale" class="form-label">Color Scale</label>
-                                        <select class="form-select" id="heatmapColorScale">
-                                            <option value="RdYlBu">Red-Yellow-Blue</option>
-                                            <option value="Viridis">Viridis</option>
-                                            <option value="RdBu">Red-Blue</option>
-                                            <option value="Spectral">Spectral</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="clusterSamples" checked>
-                                            <label class="form-check-label" for="clusterSamples">
-                                                Cluster Samples
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="clusterGenes" checked>
-                                            <label class="form-check-label" for="clusterGenes">
-                                                Cluster Genes
-                                            </label>
-                                        </div>
-                                    </div>
+
                                     <button type="submit" class="btn btn-warning">
                                         <i class="fas fa-th me-2"></i>Generate Heatmap
                                     </button>
@@ -964,10 +799,10 @@
                                 <div class="user-guide text-light">
                                     <h6 class="text-white mb-3">Getting Started</h6>
                                     <ol class="text-light">
-                                        <li class="mb-2"><strong class="text-info">Data Upload:</strong> <span class="text-light">Use options 1-4 to load your data (GEO datasets or custom files)</span></li>
-                                        <li class="mb-2"><strong class="text-info">Data Exploration:</strong> <span class="text-light">Option 5 to explore and filter your dataset</span></li>
-                                        <li class="mb-2"><strong class="text-info">Visualization:</strong> <span class="text-light">Options 6-8 for geographic and dimensionality reduction plots</span></li>
-                                        <li class="mb-2"><strong class="text-info">Analysis:</strong> <span class="text-light">Options 9-12 for gene expression analysis and visualization</span></li>
+                                        <li class="mb-2"><strong class="text-info">Data Upload:</strong> <span class="text-light">Use options 1-2 to load your data (GEO datasets or custom files)</span></li>
+                                        <li class="mb-2"><strong class="text-info">Data Exploration:</strong> <span class="text-light">Option 3 to explore and filter your dataset</span></li>
+                                        <li class="mb-2"><strong class="text-info">Visualization:</strong> <span class="text-light">Options 4-6 for geographic and dimensionality reduction plots</span></li>
+                                        <li class="mb-2"><strong class="text-info">Analysis:</strong> <span class="text-light">Options 7-10 for gene expression analysis and visualization</span></li>
                                     </ol>
                                     
                                     <h6 class="mt-4 text-white mb-3">Function Overview</h6>
@@ -976,37 +811,31 @@
                                             <strong class="text-warning">1. GEO Dataset Download:</strong> <span class="text-light">Download and load datasets from NCBI GEO database</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">2. Format Dataset:</strong> <span class="text-light">Upload and format your own CSV/TSV files</span>
+                                            <strong class="text-warning">2. Upload Custom Data:</strong> <span class="text-light">Upload and format your own CSV/TSV files</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">3. Upload Metadata:</strong> <span class="text-light">Upload sample metadata files</span>
+                                            <strong class="text-warning">3. Data Exploration:</strong> <span class="text-light">Explore, filter, and preview your data</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">4. Upload Expression:</strong> <span class="text-light">Upload gene expression data files</span>
+                                            <strong class="text-warning">4. Geographic Visualization:</strong> <span class="text-light">Create maps showing study locations</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">5. Data Exploration:</strong> <span class="text-light">Explore, filter, and preview your data</span>
+                                            <strong class="text-warning">5. PCA Analysis:</strong> <span class="text-light">Principal Component Analysis for dimensionality reduction</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">6. Geographic Visualization:</strong> <span class="text-light">Create maps showing study locations</span>
+                                            <strong class="text-warning">6. UMAP Analysis:</strong> <span class="text-light">UMAP for non-linear dimensionality reduction</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">7. PCA Analysis:</strong> <span class="text-light">Principal Component Analysis for dimensionality reduction</span>
+                                            <strong class="text-warning">7. Differential Expression:</strong> <span class="text-light">Compare gene expression between groups</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">8. UMAP Analysis:</strong> <span class="text-light">UMAP for non-linear dimensionality reduction</span>
+                                            <strong class="text-warning">8. Gene Exploration:</strong> <span class="text-light">Explore individual gene expression patterns</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">9. Differential Expression:</strong> <span class="text-light">Compare gene expression between groups</span>
+                                            <strong class="text-warning">9. Chromosome Mapping:</strong> <span class="text-light">Map genes to chromosomal locations</span>
                                         </div>
                                         <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">10. Gene Exploration:</strong> <span class="text-light">Explore individual gene expression patterns</span>
-                                        </div>
-                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">11. Chromosome Mapping:</strong> <span class="text-light">Map genes to chromosomal locations</span>
-                                        </div>
-                                        <div class="function-item mb-2 p-2 rounded" style="background-color: rgba(255, 255, 255, 0.1);">
-                                            <strong class="text-warning">12. Heatmap Visualization:</strong> <span class="text-light">Generate expression heatmaps for gene sets</span>
+                                            <strong class="text-warning">10. Heatmap Visualization:</strong> <span class="text-light">Generate expression heatmaps for gene sets</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1044,6 +873,65 @@
                         </div>
                         
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Custom Data Page (Bottom) -->
+        <div class="page" id="upload-custom-data-page">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <h2><i class="fas fa-file-import me-3"></i>Upload Custom Data</h2>
+                    <p class="text-light">Upload your own expression and metadata files</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-file-upload me-2"></i>Upload Custom Dataset</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="uploadCustomDataForm" enctype="multipart/form-data">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="customExpressionFile" class="form-label">Expression File (CSV, TSV, TXT)</label>
+                                            <input type="file" class="form-control" id="customExpressionFile" name="expression_file" accept=".csv,.tsv,.txt">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="customMetadataFile" class="form-label">Metadata File (CSV, TSV, TXT)</label>
+                                            <input type="file" class="form-control" id="customMetadataFile" name="metadata_file" accept=".csv,.tsv,.txt">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="customExprSampleCol" class="form-label">Expression Sample ID Column</label>
+                                            <input type="text" class="form-control" id="customExprSampleCol" value="Sample" placeholder="Sample">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="customMetaSampleCol" class="form-label">Metadata Sample ID Column</label>
+                                            <input type="text" class="form-control" id="customMetaSampleCol" value="SampleID" placeholder="SampleID">
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fas fa-upload me-2"></i>Upload & Process Data
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="uploadCustomDataResults" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-info-circle me-2"></i>Upload Info</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="uploadCustomDataSummary">
+                                    <p class="text-muted">Upload files to see summary</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
